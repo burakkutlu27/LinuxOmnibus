@@ -14,9 +14,15 @@
       ]
     },
     {
-      "source": "/(manifest.webmanifest|robots.txt|sitemap.xml)",
+      "source": "/(manifest.webmanifest|robots.txt|sitemap.xml|llms.txt|styles.css|analytics.js)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/llms.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
       ]
     },
     {

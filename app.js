@@ -13,9 +13,36 @@
         [INTERVIEW_KNOWN_KEY]: 'linux-bible-interview-known'
     };
     const SPECIAL_ROUTES = ['encyclopedia', 'kali', 'roadmap', 'tracks', 'interview'];
-    const DEFAULT_TITLE = 'Linux Omnibus — Sıfırdan DevOps & Güvenliğe';
-    const DEFAULT_DESC = 'Türkçe Linux müfredatı: terminal, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, hardening, Kali ve kriz runbook’ları.';
-    const CANONICAL_ORIGIN = 'https://burakkutlu27.github.io/LinuxOmnibus';
+    const DEFAULT_TITLE = 'Linux Omnibus | Türkçe Linux, DevOps ve Siber Güvenlik Eğitimi';
+    const DEFAULT_DESC = 'Ücretsiz Türkçe Linux müfredatı: terminalden Docker, Kubernetes, CI/CD, Ansible ve hardening’e. DevOps, SRE ve güvenlik kariyerine job-ready hazırlık — 35 bölüm, quiz ve mülakat.';
+    const CANONICAL_ORIGIN = 'https://linuxomnibus.burakkutlu.com';
+    const LAZY_SCRIPTS = {
+        encyclopedia: ['encyclopedia.js', 'encyclopedia-more.js', 'encyclopedia-devops.js'],
+        kali: ['kali-arsenal.js', 'kali-deep.js'],
+        interview: ['interview.js']
+    };
+    const PAGE_SEO = {
+        tracks: {
+            title: 'Hedef Yollar: DevOps, SRE ve Linux Kariyer Müfredatı | Omnibus',
+            description: 'DevOps, SRE, SOC ve Red Team için Türkçe Linux hedef yolları: haftalık ders planı, kimler için, bölüm sayısı, mülakat hazırlığı. 9 kariyer yolunda job-ready müfredat.'
+        },
+        roadmap: {
+            title: 'Tüm Müfredat — 35 Bölümlük Linux DevOps Yol Haritası | Omnibus',
+            description: 'Sıfırdan terminalden Docker, Kubernetes, CI/CD, Ansible, hardening ve Kali’ye: 35 bölümlük Türkçe Linux müfredat haritası, ders ilerlemesi ve bölüm bazlı okundu takibi.'
+        },
+        encyclopedia: {
+            title: 'Komut Ansiklopedisi — Linux ve DevOps Komutları | Omnibus',
+            description: 'Türkçe Linux komut ansiklopedisi: terminal, dosya, süreç, ağ, Docker, Kubernetes ve Ansible araçları. ~570 komut, örnek kullanım, TR karşılık ve kısa ipuçları.'
+        },
+        kali: {
+            title: 'Kali Arsenal — Penetrasyon Test ve Güvenlik Araçları | Omnibus',
+            description: 'Kali Linux araç kataloğu ve derin eğitim: Nmap, Burp Suite, Metasploit, Wireshark, SQLmap ve resmi kali-tools metapaketleri. Lab ortamı için Türkçe rehber.'
+        },
+        interview: {
+            title: 'Mülakat Antrenmanı — Linux DevOps ve Güvenlik Soruları | Omnibus',
+            description: 'Linux, DevOps, Docker, Kubernetes ve siber güvenlik mülakat soruları. Kariyer yoluna göre filtre, seviye seçimi ve Türkçe antrenman modu ile mülakat hazırlığı.'
+        }
+    };
 
     function storageGet(key) {
         try {
@@ -186,6 +213,35 @@
         return ids;
     }
 
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            if (document.querySelector(`script[src="${src}"]`)) {
+                resolve();
+                return;
+            }
+            const el = document.createElement('script');
+            el.src = src;
+            el.defer = true;
+            el.onload = () => resolve();
+            el.onerror = () => reject(new Error('Script yüklenemedi: ' + src));
+            document.body.appendChild(el);
+        });
+    }
+
+    async function ensureRouteScripts(routeId) {
+        const bundle = LAZY_SCRIPTS[routeId];
+        if (!bundle) return;
+        await Promise.all(bundle.map(loadScript));
+    }
+
+    function chapterSeo(ch) {
+        const base = `${ch.num}. ${ch.title} — Türkçe Linux DevOps Dersi | Omnibus`;
+        return {
+            title: base.length <= 60 ? base : `${ch.num}. ${ch.title} — Linux Omnibus Dersi`.slice(0, 60),
+            description: (plainText(ch.intro || '') || `${ch.title} — Linux Omnibus Türkçe dersi, quiz ve mülakat köşesi.`).slice(0, 160)
+        };
+    }
+
     function updateProgress() {
         const all = allLessonIds();
         const read = getRead();
@@ -194,11 +250,12 @@
         const fill = $('#progress-fill');
         const label = $('#progress-label');
         const total = $('#progress-total');
-        if (fill) fill.style.width = pct + '%';
+        if (fill) {
+            fill.value = pct;
+            fill.setAttribute('aria-valuenow', String(pct));
+        }
         if (label) label.textContent = n;
         if (total) total.textContent = all.length;
-        const bar = $('#progress-bar');
-        if (bar) bar.setAttribute('aria-valuenow', String(pct));
         const trackLabel = $('#track-label');
         if (trackLabel) {
             const t = currentTrack();
@@ -377,9 +434,18 @@
         if (el) el.setAttribute(attr || 'content', value);
     }
 
-    function updateDocumentMeta(pageTitle, description) {
-        const fullTitle = pageTitle ? `${pageTitle} — Linux Omnibus` : DEFAULT_TITLE;
-        const desc = (description && description.slice(0, 160)) || DEFAULT_DESC;
+    function updateDocumentMeta(pageId, chapter, fallbackDesc) {
+        let fullTitle = DEFAULT_TITLE;
+        let desc = fallbackDesc || DEFAULT_DESC;
+        if (PAGE_SEO[pageId]) {
+            fullTitle = PAGE_SEO[pageId].title;
+            desc = PAGE_SEO[pageId].description;
+        } else if (chapter) {
+            const seo = chapterSeo(chapter);
+            fullTitle = seo.title;
+            desc = seo.description;
+        }
+        desc = desc.slice(0, 160);
         document.title = fullTitle;
         setMetaContent('meta[name="description"]', desc);
         setMetaContent('meta[property="og:title"]', fullTitle);
@@ -460,8 +526,9 @@
         return id ? { id, level } : null;
     }
 
-    function navTo(id, opts) {
+    async function navTo(id, opts) {
         opts = opts || {};
+        await ensureRouteScripts(id);
         state.chapterId = id;
         if (opts.level) state.level = opts.level;
         else if (!opts.keepLevel) state.level = 'baslangic';
@@ -471,46 +538,34 @@
         }
         $all('.nav-btn').forEach(b => b.classList.toggle('nav-item-active', b.dataset.nav === id));
 
-        let metaTitle = null;
-        let metaDesc = null;
+        let metaChapter = null;
 
         if (id === 'encyclopedia') {
             $('#current-section-title').textContent = 'Komut Ansiklopedisi';
-            metaTitle = 'Komut Ansiklopedisi';
-            metaDesc = 'Linux komut ansiklopedisi: gezinme, dosya, süreç, ağ, Docker, Kubernetes ve ops araçları.';
             renderEncyclopedia(opts.query);
         } else if (id === 'kali') {
             $('#current-section-title').textContent = 'Kali Arsenal';
-            metaTitle = 'Kali Arsenal';
-            metaDesc = 'Kali Linux araç kataloğu ve derin eğitim: Nmap, Burp, Metasploit, Wireshark ve daha fazlası.';
             renderKaliArsenal(opts.query);
         } else if (id === 'roadmap') {
             $('#current-section-title').textContent = 'Tüm Müfredat';
-            metaTitle = 'Tüm Müfredat';
-            metaDesc = '35 bölümlük Linux Omnibus yol haritası: sıfırdan DevOps, hardening ve güvenliğe.';
             renderRoadmap();
         } else if (id === 'tracks') {
             $('#current-section-title').textContent = 'Hedef Yollar';
-            metaTitle = 'Hedef Yollar';
-            metaDesc = 'DevOps, SRE, SOC, Red Team, Cloud Ops ve diğer kariyer yollarına göre filtrelenmiş Linux müfredatı.';
             renderTracks();
         } else if (id === 'interview') {
             $('#current-section-title').textContent = 'Mülakat Antrenmanı';
-            metaTitle = 'Mülakat Antrenmanı';
-            metaDesc = 'Linux, DevOps ve güvenlik mülakat soruları — track ve seviyeye göre antrenman.';
             renderInterview();
         } else {
             const ch = window.BIBLE.find(c => c.id === id);
             if (ch) {
                 $('#current-section-title').textContent = `${ch.num}. ${ch.title}`;
-                metaTitle = `${ch.num}. ${ch.title}`;
-                metaDesc = plainText(ch.intro || '') || `${ch.title} — Linux Omnibus dersi.`;
+                metaChapter = ch;
             }
             renderChapter();
         }
 
         if (!opts.skipHash) setHash(id, state.level);
-        updateDocumentMeta(metaTitle, metaDesc);
+        updateDocumentMeta(id, metaChapter);
         if (!opts.skipScroll) $('main')?.scrollTo({ top: 0, behavior: opts.instant ? 'auto' : 'smooth' });
         closeMobile();
     }
@@ -783,7 +838,7 @@
         let html = `
             <header class="mb-8 border-b border-card-border pb-6">
                 <span class="tag-badge bg-term-cyan/10 text-term-cyan border border-term-cyan/25">Bölüm ${ch.num}</span>
-                <h2 class="text-2xl font-semibold mt-3 text-[var(--text)]">${ch.title}</h2>
+                <h1 class="text-2xl font-semibold mt-3 text-[var(--text)]">${ch.title}</h1>
                 <p class="prose-book mt-3 text-base">${ch.intro}</p>
                 ${ch.who ? `<p class="text-xs text-[var(--muted)] mt-3 font-sans">Bu bölüm kimler için: ${ch.who}</p>` : ''}
             </header>
@@ -874,8 +929,6 @@
                 const body = btn.nextElementSibling;
                 body.classList.toggle('open');
                 btn.setAttribute('aria-expanded', body.classList.contains('open'));
-                const icon = btn.querySelector('i');
-                if (icon) icon.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
             });
         });
         $all('[data-mark]').forEach(btn => {
@@ -1342,8 +1395,7 @@
             btn.addEventListener('click', () => {
                 const body = btn.nextElementSibling;
                 body.classList.toggle('open');
-                const icon = btn.querySelector('i');
-                if (icon) icon.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+                btn.setAttribute('aria-expanded', body.classList.contains('open'));
             });
         });
         root.querySelectorAll('.copy-cmd').forEach(btn => {
@@ -1401,7 +1453,7 @@
         box.innerHTML = `
             <header class="mb-6 border-b border-card-border pb-5">
                 <span class="tag-badge bg-term-red/10 text-term-red border border-term-red/25">Kali Linux</span>
-                <h2 class="text-2xl font-semibold mt-3 text-[var(--text)]">Kali Arsenal</h2>
+                <h1 class="text-2xl font-semibold mt-3 text-[var(--text)]">Kali Arsenal</h1>
                 <p class="prose-book mt-3 text-base">
                     Önce <strong>Derin Eğitim</strong> ile en kritik araçları öğrenin (ne işe yarar, nasıl çalışır, lab).
                     Sonra <strong>Tam Katalog</strong> ile resmi metapaketlerdeki yüzlerce aracı tarayın.
@@ -1692,7 +1744,7 @@
         let html = `
             <header class="mb-6 border-b border-card-border pb-6">
                 <span class="tag-badge bg-term-amber/10 text-term-amber border border-term-amber/25">MÜLAKAT</span>
-                <h2 class="text-2xl font-semibold mt-3 text-[var(--text)]">Mülakat Antrenmanı</h2>
+                <h1 class="text-2xl font-semibold mt-3 text-[var(--text)]">Mülakat Antrenmanı</h1>
                 <p class="prose-book mt-3 text-base">Ayrı bir pratik alanı: rol filtreli sorular, kart modu, bildiklerimi ayır. Derslerdeki Senior köşeleri de buraya akar.</p>
                 <p class="text-xs text-[var(--muted)] mt-3 font-sans">${pool.length} soru · ${knownInPool} işaretli “biliyorum”</p>
             </header>
@@ -1833,8 +1885,7 @@
             btn.addEventListener('click', () => {
                 const body = btn.nextElementSibling;
                 body.classList.toggle('open');
-                const icon = btn.querySelector('i');
-                if (icon) icon.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+                btn.setAttribute('aria-expanded', body.classList.contains('open'));
             });
         });
         $all('.iv-toggle-known').forEach(btn => {
@@ -1908,8 +1959,8 @@
         let html = `
             <header class="mb-8 border-b border-card-border pb-6">
                 <span class="tag-badge bg-term-green/10 text-term-green border border-term-green/25">KARİYER YOLLARI</span>
-                <h2 class="text-2xl font-semibold mt-3 text-[var(--text)]">Hedefe yönelik müfredat</h2>
-                <p class="prose-book mt-3 text-base">Rolünü seç — sidebar o yola göre sıralanır, ilerleme çubuğu yalnızca bu yoldaki dersleri sayar. İstediğin zaman tüm müfredata dönebilirsin.</p>
+                <h1 class="text-2xl font-semibold mt-3 text-[var(--text)]">Hedefe yönelik Linux ve DevOps müfredatı</h1>
+                <p class="prose-book mt-3 text-base">DevOps mühendisi, SRE, sistem yöneticisi, SOC analisti veya Red Team hedefin için rolünü seç — sidebar o yola göre sıralanır, ilerleme çubuğu yalnızca bu yoldaki Linux derslerini sayar. Docker, Kubernetes, hardening ve Kali modülleri kariyer yoluna göre filtrelenir.</p>
             </header>
             <div class="grid gap-3 mb-10">`;
 
@@ -1932,7 +1983,7 @@
                         <p class="text-xs text-[var(--muted)] mt-1.5 leading-relaxed"><span class="text-[var(--text)] font-medium">Kimler:</span> ${escapeHtml(t.who)}</p>
                         <p class="text-xs text-[var(--muted)] mt-1 leading-relaxed"><span class="text-[var(--text)] font-medium">Çıktı:</span> ${escapeHtml(t.outcome)}</p>
                         <p class="text-[10px] font-mono text-[var(--muted)] mt-2">${chCount} bölüm · ${ids.length} ders · ${done}/${ids.length} okundu</p>
-                        <div class="progress-bar mt-2 rounded overflow-hidden"><span style="width:${pct}%"></span></div>
+                        <progress class="track-progress w-full mt-2" max="100" value="${pct}" aria-label="İlerleme ${pct}%"></progress>
                     </div>
                     <div class="flex flex-col gap-2 shrink-0">
                         <button type="button" data-activate="${t.id}" class="px-3 py-2 rounded text-xs font-semibold border border-term-cyan/40 bg-term-cyan/10 text-term-cyan hover:bg-term-cyan/20">
@@ -1947,7 +1998,20 @@
         });
 
         html += `</div>
-            <p class="text-xs text-[var(--muted)]">Tüm konuları serbest dolaşmak için <button type="button" id="goto-roadmap" class="underline text-term-cyan">Tüm Müfredat</button> haritasına bak.</p>`;
+            <section class="mt-10 pt-8 border-t border-card-border prose-book text-sm space-y-4">
+                <h2 class="text-lg font-semibold text-[var(--text)] font-sans">Linux dersleri, bölümler ve mülakat hazırlığı</h2>
+                <p>Her kariyer yolu haftalık tempo, <strong>kimler</strong> için uygun olduğu, beklenen <strong>çıktı</strong>, kapsanan <strong>bölüm</strong> ve <strong>ders</strong> sayısı ile listelenir. Bir yolu seçtiğinizde sidebar yalnızca o yoldaki Linux içeriğini gösterir; okuduğunuz dersler ilerleme çubuğuna yansır.</p>
+                <p>DevOps mühendisi, SRE, Red Hat sistem yöneticisi, SOC analisti, Red Team, Cloud Ops ve sıfırdan Linux yollarının her biri Docker, Kubernetes, hardening veya Kali modüllerini rolünüze göre filtreler. Yol kartındaki <strong>Mülakat</strong> düğmesi o track’e özel soru setine götürür.</p>
+                <h2 class="text-lg font-semibold text-[var(--text)] font-sans">İlgili Linux Omnibus bölümleri</h2>
+                <ul class="list-disc pl-5 space-y-1 text-[var(--muted)] font-sans text-xs">
+                    <li><a href="?p=roadmap" class="text-term-cyan underline underline-offset-2">Tüm müfredat</a> — 35 bölümlük tam Linux · DevOps · güvenlik haritası</li>
+                    <li><a href="?p=encyclopedia" class="text-term-cyan underline underline-offset-2">Komut ansiklopedisi</a> — ~570 komut, TR karşılık ve örnekler</li>
+                    <li><a href="?p=interview" class="text-term-cyan underline underline-offset-2">Mülakat antrenmanı</a> — Linux, DevOps ve güvenlik soruları</li>
+                    <li><a href="?p=kali" class="text-term-cyan underline underline-offset-2">Kali Arsenal</a> — penetrasyon test araç kataloğu</li>
+                    <li><a href="?p=ch0" class="text-term-cyan underline underline-offset-2">Linux nedir?</a> — müfredata giriş dersi</li>
+                </ul>
+            </section>
+            <p class="text-xs text-[var(--muted)] mt-6">Tüm konuları serbest dolaşmak için <a href="?p=roadmap" class="underline text-term-cyan">Tüm Müfredat</a> haritasına bak veya <button type="button" id="goto-roadmap" class="underline text-term-cyan">haritayı aç</button>.</p>`;
         box.innerHTML = html;
 
         $all('[data-activate]').forEach(btn => {
@@ -2031,7 +2095,7 @@
         let html = `
             <header class="mb-8 border-b border-card-border pb-6">
                 <span class="tag-badge bg-term-cyan/10 text-term-cyan border border-term-cyan/25">KONU HARİTASI</span>
-                <h2 class="text-2xl font-semibold mt-3 text-[var(--text)]">Tüm Müfredat</h2>
+                <h1 class="text-2xl font-semibold mt-3 text-[var(--text)]">Tüm Müfredat</h1>
                 <p class="prose-book mt-3 text-base">Rol bazlı gitmek için <button type="button" id="goto-tracks" class="underline text-term-green">Hedef Yollar</button>’ı kullan. Burada tüm bölümler konu grubuna göre listelenir.</p>
                 <p class="text-xs text-[var(--muted)] mt-3 font-sans">${window.BIBLE.length} bölüm · ${(window.COMMANDS||[]).length} komut · ${(window.KALI_DEEP||[]).length} Kali derin</p>
             </header>`;
@@ -2049,7 +2113,7 @@
                         <span class="text-[10px] font-mono text-[var(--muted)]">${pr.done}/${pr.total}</span>
                     </div>
                     <p class="text-[11px] text-[var(--muted)] mt-1">${ch.subtitle||''}</p>
-                    <div class="progress-bar mt-2 rounded overflow-hidden"><span style="width:${pr.pct}%"></span></div>
+                    <progress class="roadmap-progress w-full mt-2" max="100" value="${pr.pct}" aria-label="Bölüm ilerlemesi ${pr.pct}%"></progress>
                 </button>`;
             });
             html += `</div></section>`;
@@ -2083,7 +2147,7 @@
         box.innerHTML = `
             <header class="mb-6 border-b border-card-border pb-5">
                 <span class="tag-badge bg-term-amber/10 text-term-amber border border-term-amber/25">Referans</span>
-                <h2 class="text-2xl font-semibold mt-3 text-[var(--text)]">Komut Ansiklopedisi</h2>
+                <h1 class="text-2xl font-semibold mt-3 text-[var(--text)]">Komut Ansiklopedisi</h1>
                 <p class="prose-book mt-3 text-base">
                     Linux komutlarının çoğu İngilizce kelimelerin veya kısaltmaların kısasıdır.
                     Burada her komutun <strong>açılımı</strong>, <strong>Türkçe karşılığı</strong> ve ismin <strong>nereden geldiği</strong> var — ezberlemek yerine anlamayı hedefler.
@@ -2152,7 +2216,7 @@
         updateDocumentMeta(`Arama: ${q}`, `Linux Omnibus’ta “${q}” araması — ders, komut ve Kali sonuçları.`);
         $all('.nav-btn').forEach(b => b.classList.remove('nav-item-active'));
 
-        let html = `<header class="mb-6"><h2 class="text-xl font-semibold">Arama sonuçları</h2>
+        let html = `<header class="mb-6"><h1 class="text-xl font-semibold">Arama sonuçları</h1>
             <p class="text-xs text-[var(--muted)] mt-1">${lessonHits.length} ders · ${cmdHits.length} komut · ${kaliHits.length} Kali aracı</p></header>`;
 
         if (kaliHits.length) {
@@ -2236,24 +2300,24 @@
         });
     }
 
-    function applyRouteFromHash() {
+    async function applyRouteFromHash() {
         const parsed = parseHash();
         if (!parsed || !parsed.id) {
-            navTo('tracks', { instant: true });
+            await navTo('tracks', { instant: true });
             return;
         }
         const { id, level } = parsed;
         if (SPECIAL_ROUTES.includes(id)) {
-            navTo(id, { instant: true });
+            await navTo(id, { instant: true });
             return;
         }
         const ch = window.BIBLE.find(c => c.id === id);
         if (!ch) {
-            navTo(window.BIBLE[0].id, { instant: true });
+            await navTo(window.BIBLE[0].id, { instant: true });
             return;
         }
         const lv = (level && ch.levels[level]) ? level : 'baslangic';
-        navTo(id, { level: lv, keepLevel: true, instant: true });
+        await navTo(id, { level: lv, keepLevel: true, instant: true });
     }
 
     function openMobile() {

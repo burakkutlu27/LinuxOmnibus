@@ -1,7 +1,7 @@
 {
   "name": "Linux Omnibus",
   "short_name": "Omnibus",
-  "description": "Türkçe Linux müfredatı: terminal, DevOps, hardening, Kali.",
+  "description": "Ücretsiz Türkçe Linux müfredatı: terminal, DevOps, Docker, Kubernetes, hardening, Kali.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

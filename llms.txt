@@ -1,0 +1,29 @@
+# Linux Omnibus
+
+> Ücretsiz Türkçe Linux, DevOps ve siber güvenlik müfredatı — sıfırdan job-ready seviyeye.
+
+Linux Omnibus; terminal, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, hardening, Kali Linux araçları ve kriz runbook'larını kapsayan ansiklopedik bir eğitim sitesidir. 35 bölüm, 9 kariyer yolu, ~570 komut ansiklopedisi ve mülakat antrenmanı içerir.
+
+## Site
+
+- https://linuxomnibus.burakkutlu.com/
+
+## Ana sayfalar
+
+- Hedef yollar (DevOps, SRE, SOC, Red Team): https://linuxomnibus.burakkutlu.com/?p=tracks
+- Tüm müfredat haritası: https://linuxomnibus.burakkutlu.com/?p=roadmap
+- Komut ansiklopedisi: https://linuxomnibus.burakkutlu.com/?p=encyclopedia
+- Kali Arsenal: https://linuxomnibus.burakkutlu.com/?p=kali
+- Mülakat antrenmanı: https://linuxomnibus.burakkutlu.com/?p=interview
+
+## Konu anahtar kelimeleri
+
+Linux, DevOps, SRE, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, Terraform, hardening, siber güvenlik, Kali Linux, Bash, SSH, systemd, gözlemlenebilirlik, GitOps, bulut (AWS/Azure/GCP)
+
+## Kaynak kod
+
+- https://github.com/burakkutlu27/LinuxOmnibus
+
+## Lisans
+
+MIT — ücretsiz ve açık kaynak eğitim içeriği.

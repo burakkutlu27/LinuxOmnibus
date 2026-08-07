@@ -3,29 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linux Omnibus — Sıfırdan DevOps &amp; Güvenliğe</title>
-    <meta name="description" content="Türkçe Linux müfredatı: terminal, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, hardening, Kali ve kriz runbook’ları.">
+    <title>Linux Omnibus | Türkçe Linux, DevOps ve Siber Güvenlik Eğitimi</title>
+    <meta name="description" content="Ücretsiz Türkçe Linux müfredatı: terminalden Docker, Kubernetes, CI/CD, Ansible ve hardening’e. DevOps, SRE ve güvenlik kariyerine job-ready hazırlık — 35 bölüm, quiz ve mülakat.">
+    <meta name="keywords" content="Linux eğitimi, Türkçe Linux, DevOps, SRE, siber güvenlik, Docker, Kubernetes, Ansible, CI/CD, sistem yönetimi, Kali Linux, hardening">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Linux Omnibus">
     <meta name="theme-color" content="#0B0E14">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Linux Omnibus">
-    <link rel="canonical" href="https://burakkutlu27.github.io/LinuxOmnibus/">
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs">
+    <link rel="canonical" href="https://linuxomnibus.burakkutlu.com/">
     <meta property="og:site_name" content="Linux Omnibus">
     <meta property="og:locale" content="tr_TR">
-    <meta property="og:title" content="Linux Omnibus — Sıfırdan DevOps &amp; Güvenliğe">
-    <meta property="og:description" content="Ansiklopedik, job-ready Linux · DevOps · Siber güvenlik müfredatı.">
+    <meta property="og:title" content="Linux Omnibus | Türkçe Linux, DevOps ve Siber Güvenlik Eğitimi">
+    <meta property="og:description" content="Ücretsiz Türkçe Linux müfredatı: terminalden Docker, Kubernetes, CI/CD, Ansible ve hardening’e. DevOps, SRE ve güvenlik kariyerine job-ready hazırlık.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://burakkutlu27.github.io/LinuxOmnibus/">
-    <meta property="og:image" content="https://burakkutlu27.github.io/LinuxOmnibus/og-image.jpg">
+    <meta property="og:url" content="https://linuxomnibus.burakkutlu.com/">
+    <meta property="og:image" content="https://linuxomnibus.burakkutlu.com/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Linux Omnibus — Sıfırdan DevOps ve Güvenlik">
+    <meta property="og:image:alt" content="Linux Omnibus — Türkçe Linux, DevOps ve Siber Güvenlik Eğitimi">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Linux Omnibus — Sıfırdan DevOps &amp; Güvenliğe">
-    <meta name="twitter:description" content="Ansiklopedik, job-ready Linux · DevOps · Siber güvenlik müfredatı.">
-    <meta name="twitter:image" content="https://burakkutlu27.github.io/LinuxOmnibus/og-image.jpg">
+    <meta name="twitter:title" content="Linux Omnibus | Türkçe Linux, DevOps ve Siber Güvenlik Eğitimi">
+    <meta name="twitter:description" content="Ücretsiz Türkçe Linux müfredatı: terminalden Docker, Kubernetes, CI/CD, Ansible ve hardening’e. DevOps, SRE ve güvenlik kariyerine job-ready hazırlık.">
+    <meta name="twitter:image" content="https://linuxomnibus.burakkutlu.com/og-image.jpg">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐧%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -35,36 +37,49 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet"></noscript>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
         {
           "@type": "WebSite",
-          "@id": "https://burakkutlu27.github.io/LinuxOmnibus/#website",
-          "url": "https://burakkutlu27.github.io/LinuxOmnibus/",
+          "@id": "https://linuxomnibus.burakkutlu.com/#website",
+          "url": "https://linuxomnibus.burakkutlu.com/",
           "name": "Linux Omnibus",
-          "description": "Türkçe Linux müfredatı: terminal, DevOps, hardening, Kali ve kriz runbook’ları.",
+          "description": "Türkçe Linux müfredatı: terminal, DevOps, Docker, Kubernetes, hardening, Kali ve kriz runbook’ları.",
           "inLanguage": "tr",
-          "image": "https://burakkutlu27.github.io/LinuxOmnibus/og-image.jpg"
+          "image": "https://linuxomnibus.burakkutlu.com/og-image.jpg",
+          "publisher": { "@id": "https://linuxomnibus.burakkutlu.com/#organization" }
+        },
+        {
+          "@type": "EducationalOrganization",
+          "@id": "https://linuxomnibus.burakkutlu.com/#organization",
+          "name": "Linux Omnibus",
+          "url": "https://linuxomnibus.burakkutlu.com/",
+          "description": "Ücretsiz Türkçe Linux, DevOps ve siber güvenlik eğitim platformu.",
+          "inLanguage": "tr",
+          "sameAs": [
+            "https://github.com/burakkutlu27/LinuxOmnibus"
+          ]
         },
         {
           "@type": "Course",
-          "@id": "https://burakkutlu27.github.io/LinuxOmnibus/#course",
+          "@id": "https://linuxomnibus.burakkutlu.com/#course",
           "name": "Linux Omnibus",
           "description": "Sıfırdan terminal kullanımından Docker, Kubernetes, hardening, SOC ve Kali araçlarına uzanan Türkçe Linux müfredatı.",
-          "url": "https://burakkutlu27.github.io/LinuxOmnibus/",
+          "url": "https://linuxomnibus.burakkutlu.com/",
           "inLanguage": "tr",
           "isAccessibleForFree": true,
           "educationalLevel": "Beginner to Advanced",
           "provider": {
-            "@type": "Organization",
-            "name": "Linux Omnibus",
-            "url": "https://burakkutlu27.github.io/LinuxOmnibus/"
+            "@type": "EducationalOrganization",
+            "@id": "https://linuxomnibus.burakkutlu.com/#organization"
           },
           "offers": {
             "@type": "Offer",
@@ -104,170 +119,17 @@
             }
         }
     </script>
-    <style>
-        :root, .dark {
-            --term-bg: #0B0E14;
-            --card-bg: #12161F;
-            --card-border: #1E2636;
-            --sidebar-bg: #080A0F;
-            --text: #E2E8F0;
-            --muted: #94A3B8;
-            --prose: #CBD5E1;
-            --header-glass: rgba(18, 22, 31, 0.92);
-            --callout-bg: rgba(34, 211, 238, 0.06);
-        }
-        html.light {
-            --term-bg: #F7F5F0;
-            --card-bg: #FFFFFF;
-            --card-border: #E2DDD4;
-            --sidebar-bg: #EFEBE3;
-            --text: #1A1A1A;
-            --muted: #5C6570;
-            --prose: #2C333A;
-            --header-glass: rgba(247, 245, 240, 0.94);
-            --callout-bg: rgba(14, 116, 144, 0.06);
-        }
-        body { font-family: 'IBM Plex Sans', sans-serif; background: var(--term-bg); color: var(--text); }
-        .prose-book { font-family: 'Source Serif 4', Georgia, serif; color: var(--prose); font-size: 1.05rem; line-height: 1.75; }
-        .prose-book p + p { margin-top: 1em; }
-        .prose-book strong { color: var(--text); font-weight: 600; }
-        code, .font-mono { font-family: 'IBM Plex Mono', monospace; }
-        .scroll-custom::-webkit-scrollbar { width: 6px; }
-        .scroll-custom::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 3px; }
-        .nav-item-active {
-            background: rgba(34, 211, 238, 0.08);
-            border-left: 3px solid #22D3EE;
-            color: var(--text) !important;
-            font-weight: 600;
-        }
-        .nav-btn {
-            border-left: 3px solid transparent;
-            transition: background .15s, color .15s;
-            min-height: 44px;
-        }
-        .depth-card { background: var(--card-bg); border: 1px solid var(--card-border); transition: border-color .18s; }
-        .depth-card:hover { border-color: rgba(34, 211, 238, 0.4); }
-        .terminal-box { background: #05070A; border: 1px solid var(--card-border); }
-        html.light .terminal-box { background: #1a1f2a; color: #e2e8f0; }
-        .tag-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 3px; letter-spacing: .04em; text-transform: uppercase; }
-        .tab-btn {
-            transition: color .15s, border-color .15s;
-            min-height: 44px;
-            padding: 0.5rem 0.25rem;
-            display: inline-flex;
-            align-items: center;
-        }
-        .tab-btn.active { border-bottom: 2px solid #22D3EE; color: #22D3EE; font-weight: 600; }
-        .glass-panel { background: var(--header-glass); backdrop-filter: blur(10px); }
-        .callout {
-            background: var(--callout-bg);
-            border-left: 3px solid #22D3EE;
-            padding: 0.85rem 1rem;
-            margin: 1.25rem 0;
-            border-radius: 0 6px 6px 0;
-        }
-        .callout.warn { border-left-color: #FBBF24; }
-        .callout.danger { border-left-color: #F87171; }
-        .callout.ok { border-left-color: #34D399; }
-        .lesson-hidden, .section-block.hidden, .level-pane.hidden, .acc-body:not(.open) { display: none; }
-        .acc-body.open { display: block; }
-        .topic-card.is-hidden { display: none !important; }
-        .fhs-node.active { border-color: #22D3EE; background: rgba(34,211,238,.1); }
-        #sidebar-overlay { display: none; }
-        #sidebar-overlay.show { display: block; }
-        @media (max-width: 767px) {
-            #sidebar {
-                position: fixed; left: 0; top: 0; bottom: 0; width: 18rem;
-                transform: translateX(-100%); transition: transform .22s; z-index: 50;
-            }
-            #sidebar.open { transform: translateX(0); }
-            .prose-book { font-size: 1rem; }
-        }
-        .progress-bar { height: 3px; background: var(--card-border); }
-        .progress-bar > span { display: block; height: 100%; background: #22D3EE; transition: width .3s; }
-        .step-num {
-            width: 1.5rem; height: 1.5rem; border-radius: 999px;
-            background: rgba(34,211,238,.15); color: #22D3EE;
-            font-size: 11px; font-weight: 700; display: inline-flex;
-            align-items: center; justify-content: center; flex-shrink: 0;
-        }
-        /* Mobil dokunma hedefleri (≥44px) */
-        .touch-target {
-            min-width: 44px;
-            min-height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #open-sidebar {
-            min-width: 44px;
-            min-height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin: -8px 0 -8px -8px;
-            padding: 8px;
-        }
-        #theme-toggle {
-            min-width: 44px;
-            min-height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #globalSearch {
-            min-height: 44px;
-            font-size: 16px; /* iOS zoom önleme */
-        }
-        @media (min-width: 640px) {
-            #globalSearch { font-size: 12px; min-height: 0; padding-top: 0.375rem; padding-bottom: 0.375rem; }
-        }
-        #export-progress, #import-progress {
-            min-height: 40px;
-            font-size: 11px;
-            padding: 0.5rem 0.5rem;
-        }
-        .chip-btn, .kali-cat, .cmd-cat, .iv-track, .iv-level, .iv-source, .iv-mode, .kali-mode-btn {
-            min-height: 36px;
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-        }
-        .chap-nav, .mark-read, .quiz-check, .quiz-reset {
-            min-height: 44px;
-        }
-        .copy-cmd, .docker-copy {
-            min-width: 36px;
-            min-height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .table-scroll {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            margin: 0 -0.25rem;
-            padding: 0 0.25rem;
-        }
-        .table-scroll table { min-width: 320px; }
-        .table-scroll input[type="checkbox"] {
-            width: 1.25rem;
-            height: 1.25rem;
-            accent-color: #22D3EE;
-        }
-        .acc-toggle { min-height: 48px; }
-        #site-footer a:hover { color: #22D3EE; }
-    </style>
 </head>
 <body class="flex h-screen overflow-hidden text-sm">
 
 <aside id="sidebar" class="w-72 bg-[var(--sidebar-bg)] border-r border-card-border flex flex-col h-full z-30 shrink-0" aria-label="Ana menü">
     <div class="p-5 border-b border-card-border">
-        <h1 class="text-base font-bold flex items-center gap-2">
+        <div class="site-brand text-base font-bold flex items-center gap-2">
             <i class="fa-brands fa-linux text-term-cyan" aria-hidden="true"></i>
             LINUX <span class="text-term-cyan">OMNIBUS</span>
-        </h1>
+        </div>
         <p class="text-[10px] text-[var(--muted)] font-mono mt-1 tracking-wide uppercase">Sıfırdan · DevOps · Güvenlik · Job-ready</p>
-        <div class="progress-bar mt-3 rounded overflow-hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar"><span id="progress-fill" style="width:0%"></span></div>
+        <progress id="progress-fill" class="sidebar-progress mt-3 w-full" max="100" value="0" aria-labelledby="progress-label"></progress>
         <p class="text-[10px] text-[var(--muted)] mt-1"><span id="progress-label">0</span> / <span id="progress-total">0</span> ders · <span id="track-label">Tüm müfredat</span></p>
     </div>
     <nav id="sidebar-nav" class="flex-1 overflow-y-auto scroll-custom py-3" aria-label="Müfredat"></nav>
@@ -288,7 +150,7 @@
             <button type="button" id="open-sidebar" class="md:hidden text-[var(--muted)]" aria-label="Menüyü aç" aria-controls="sidebar" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
             <div class="min-w-0">
                 <span class="text-[10px] font-mono text-[var(--muted)]">OMNIBUS /</span>
-                <h2 id="current-section-title" class="text-sm sm:text-base font-semibold truncate">Giriş</h2>
+                <p id="current-section-title" class="text-sm sm:text-base font-semibold truncate">Giriş</p>
             </div>
         </div>
         <div class="flex gap-2 items-center flex-1 sm:flex-none justify-end">
@@ -305,33 +167,48 @@
     </header>
 
     <div id="content-container" class="p-4 sm:p-8 max-w-3xl mx-auto w-full flex-1 pb-8">
-        <!-- rendered by app.js -->
+        <header class="mb-8 border-b border-card-border pb-6">
+            <span class="tag-badge bg-term-green/10 text-term-green border border-term-green/25">KARİYER YOLLARI</span>
+            <h1 class="text-2xl font-semibold mt-3 text-[var(--text)]">Hedefe yönelik Linux ve DevOps müfredatı</h1>
+            <p class="prose-book mt-3 text-base">DevOps mühendisi, SRE, sistem yöneticisi, SOC analisti veya Red Team hedefin için rolünü seç — sidebar o yola göre sıralanır, ilerleme çubuğu yalnızca bu yoldaki Linux derslerini sayar. Docker, Kubernetes, hardening ve Kali modülleri kariyer yoluna göre filtrelenir.</p>
+        </header>
+        <p class="text-xs text-[var(--muted)]">Müfredat kartları yükleniyor…</p>
     </div>
 
     <footer id="site-footer" class="border-t border-card-border px-4 sm:px-8 py-4 text-[11px] text-[var(--muted)] max-w-3xl mx-auto w-full mt-auto">
-        <p><strong class="text-[var(--text)]">Linux Omnibus</strong> — ücretsiz Türkçe Linux · DevOps · güvenlik müfredatı.</p>
-        <p class="mt-1">MIT lisanslı · <a href="https://github.com/burakkutlu27/LinuxOmnibus" class="underline underline-offset-2">Kaynak</a> · <a href="./robots.txt" class="underline underline-offset-2">robots</a> · <a href="./sitemap.xml" class="underline underline-offset-2">sitemap</a></p>
+        <p><strong class="text-[var(--text)]">Linux Omnibus</strong> — ücretsiz Türkçe Linux · DevOps · siber güvenlik müfredatı. Terminal, Docker, Kubernetes, Ansible, hardening ve Kali konularında job-ready eğitim.</p>
+        <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1">
+            <a href="?p=tracks" class="underline underline-offset-2">Hedef yollar</a>
+            <a href="?p=roadmap" class="underline underline-offset-2">Müfredat</a>
+            <a href="?p=encyclopedia" class="underline underline-offset-2">Ansiklopedi</a>
+            <a href="?p=interview" class="underline underline-offset-2">Mülakat</a>
+            <a href="https://github.com/burakkutlu27/LinuxOmnibus" rel="me noopener" class="underline underline-offset-2">GitHub</a>
+            <a href="./robots.txt" class="underline underline-offset-2">robots</a>
+            <a href="./sitemap.xml" class="underline underline-offset-2">sitemap</a>
+            <a href="./llms.txt" class="underline underline-offset-2">llms.txt</a>
+        </p>
     </footer>
 </main>
 
 <noscript>
-    <div style="max-width:40rem;margin:2rem auto;padding:1rem;font-family:sans-serif;line-height:1.6">
-        <h1>Linux Omnibus</h1>
-        <p>Türkçe Linux müfredatı: terminal, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, hardening, Kali ve kriz runbook’ları. Bu site JavaScript ile çalışır; içeriği görmek için JS’i etkinleştirin.</p>
+    <div class="noscript-fallback">
+        <p><strong>JavaScript gerekli:</strong> Linux Omnibus tam deneyim için JavaScript ile çalışır. Aşağıdaki statik içerik ve bağlantılar yardımcı olur.</p>
+        <p>Ücretsiz Türkçe Linux müfredatı: terminal, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, hardening, Kali ve kriz runbook’ları. DevOps, SRE ve güvenlik kariyerine job-ready hazırlık.</p>
         <p>Bölümler: Linux Nedir, Terminal, Dosyalar, GNU komutları, Yetkilendirme, Yedekleme, Editörler, PATH, FHS, Kali, Ağ, Kriz runbook, SSH, Bash, Disk/LVM, Docker, Kubernetes, CI/CD, Ansible/Terraform, Gözlemlenebilirlik, Hardening, TLS, GitOps, Git, Bulut, Python ops, DB, İleri ağ, systemd, Performance, SELinux, LDAP/SSO, IR, eBPF, Konteyner güvenliği.</p>
-        <p><a href="https://burakkutlu27.github.io/LinuxOmnibus/?p=tracks">Hedef yollar</a> · <a href="https://burakkutlu27.github.io/LinuxOmnibus/?p=encyclopedia">Komut ansiklopedisi</a></p>
+        <p><a href="https://linuxomnibus.burakkutlu.com/?p=tracks">Hedef yollar</a> · <a href="https://linuxomnibus.burakkutlu.com/?p=encyclopedia">Komut ansiklopedisi</a> · <a href="https://linuxomnibus.burakkutlu.com/?p=roadmap">Tüm müfredat</a></p>
     </div>
 </noscript>
+
+<script>window.OMNIBUS_GA_ID = window.OMNIBUS_GA_ID || '';</script>
+<script defer src="analytics.js"></script>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 
 <script defer src="content.js"></script>
 <script defer src="content-more.js"></script>
 <script defer src="tracks.js"></script>
-<script defer src="interview.js"></script>
-<script defer src="encyclopedia.js"></script>
-<script defer src="encyclopedia-more.js"></script>
-<script defer src="encyclopedia-devops.js"></script>
-<script defer src="kali-arsenal.js"></script>
-<script defer src="kali-deep.js"></script>
 <script defer src="app.js"></script>
 </body>
 </html>

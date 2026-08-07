@@ -11,8 +11,7 @@ Sunucu yok, `npm install` yok, build yok — statik dosyaları açıyorsun, okuy
   <img src="og-image.jpg" alt="Linux Omnibus — Sıfırdan DevOps ve Güvenlik" width="720">
 </p>
 
-**Canlı demo:** Vercel + kendi domain’in (subdomain bağlayınca buraya yazılacak).  
-Geçici: Vercel’in verdiği `*.vercel.app` URL’si.
+**Canlı demo:** [https://linux-omnibus.vercel.app](https://linux-omnibus.vercel.app)
 
 ---
 
@@ -84,10 +83,9 @@ Vercel Project → **Settings → Domains** → subdomain ekle → DNS’te CNAM
 
 Ana sitenizden link: `https://senin-domain.com` portföyünde “Linux Omnibus” → bu subdomain.
 
-### 3) SEO URL’lerini güncelle
+### 3) Özel domain (isteğe bağlı)
 
-`robots.txt`, `sitemap.xml`, `index.html` (canonical/OG) ve `app.js` içindeki kanonik origin şu an geçici olarak `github.io` değerinde.  
-**Canlı subdomain’i yazdığında** hepsini o URL’ye çekeriz (tek seferlik).
+Subdomain bağladığında `robots.txt`, `sitemap.xml`, `index.html` (canonical/OG) ve `app.js` içindeki `CANONICAL_ORIGIN` değerini yeni URL’ye güncelle.
 
 ---
 
