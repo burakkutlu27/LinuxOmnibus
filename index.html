@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Omnibus — Sıfırdan DevOps &amp; Güvenliğe</title>
+    <meta name="description" content="Türkçe Linux müfredatı: terminal, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, hardening, Kali ve kriz runbook’ları.">
+    <meta name="theme-color" content="#0B0E14">
+    <meta property="og:title" content="Linux Omnibus">
+    <meta property="og:description" content="Ansiklopedik, job-ready Linux · DevOps · Siber güvenlik müfredatı.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐧%3C/text%3E%3C/svg%3E">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'term-bg': 'var(--term-bg)',
+                        'card-dark': 'var(--card-bg)',
+                        'card-border': 'var(--card-border)',
+                        'term-green': '#34D399',
+                        'term-cyan': '#22D3EE',
+                        'term-amber': '#FBBF24',
+                        'term-red': '#F87171',
+                    },
+                    fontFamily: {
+                        sans: ['"IBM Plex Sans"', 'sans-serif'],
+                        mono: ['"IBM Plex Mono"', 'monospace'],
+                        serif: ['"Source Serif 4"', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root, .dark {
+            --term-bg: #0B0E14;
+            --card-bg: #12161F;
+            --card-border: #1E2636;
+            --sidebar-bg: #080A0F;
+            --text: #E2E8F0;
+            --muted: #94A3B8;
+            --prose: #CBD5E1;
+            --header-glass: rgba(18, 22, 31, 0.92);
+            --callout-bg: rgba(34, 211, 238, 0.06);
+        }
+        html.light {
+            --term-bg: #F7F5F0;
+            --card-bg: #FFFFFF;
+            --card-border: #E2DDD4;
+            --sidebar-bg: #EFEBE3;
+            --text: #1A1A1A;
+            --muted: #5C6570;
+            --prose: #2C333A;
+            --header-glass: rgba(247, 245, 240, 0.94);
+            --callout-bg: rgba(14, 116, 144, 0.06);
+        }
+        body { font-family: 'IBM Plex Sans', sans-serif; background: var(--term-bg); color: var(--text); }
+        .prose-book { font-family: 'Source Serif 4', Georgia, serif; color: var(--prose); font-size: 1.05rem; line-height: 1.75; }
+        .prose-book p + p { margin-top: 1em; }
+        .prose-book strong { color: var(--text); font-weight: 600; }
+        code, .font-mono { font-family: 'IBM Plex Mono', monospace; }
+        .scroll-custom::-webkit-scrollbar { width: 6px; }
+        .scroll-custom::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 3px; }
+        .nav-item-active {
+            background: rgba(34, 211, 238, 0.08);
+            border-left: 3px solid #22D3EE;
+            color: var(--text) !important;
+            font-weight: 600;
+        }
+        .nav-btn { border-left: 3px solid transparent; transition: background .15s, color .15s; }
+        .depth-card { background: var(--card-bg); border: 1px solid var(--card-border); transition: border-color .18s; }
+        .depth-card:hover { border-color: rgba(34, 211, 238, 0.4); }
+        .terminal-box { background: #05070A; border: 1px solid var(--card-border); }
+        html.light .terminal-box { background: #1a1f2a; color: #e2e8f0; }
+        .tag-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 3px; letter-spacing: .04em; text-transform: uppercase; }
+        .tab-btn { transition: color .15s, border-color .15s; }
+        .tab-btn.active { border-bottom: 2px solid #22D3EE; color: #22D3EE; font-weight: 600; }
+        .glass-panel { background: var(--header-glass); backdrop-filter: blur(10px); }
+        .callout {
+            background: var(--callout-bg);
+            border-left: 3px solid #22D3EE;
+            padding: 0.85rem 1rem;
+            margin: 1.25rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .callout.warn { border-left-color: #FBBF24; }
+        .callout.danger { border-left-color: #F87171; }
+        .callout.ok { border-left-color: #34D399; }
+        .lesson-hidden, .section-block.hidden, .level-pane.hidden, .acc-body:not(.open) { display: none; }
+        .acc-body.open { display: block; }
+        .topic-card.is-hidden { display: none !important; }
+        .fhs-node.active { border-color: #22D3EE; background: rgba(34,211,238,.1); }
+        #sidebar-overlay { display: none; }
+        #sidebar-overlay.show { display: block; }
+        @media (max-width: 767px) {
+            #sidebar {
+                position: fixed; left: 0; top: 0; bottom: 0; width: 18rem;
+                transform: translateX(-100%); transition: transform .22s; z-index: 50;
+            }
+            #sidebar.open { transform: translateX(0); }
+        }
+        .progress-bar { height: 3px; background: var(--card-border); }
+        .progress-bar > span { display: block; height: 100%; background: #22D3EE; transition: width .3s; }
+        .step-num {
+            width: 1.5rem; height: 1.5rem; border-radius: 999px;
+            background: rgba(34,211,238,.15); color: #22D3EE;
+            font-size: 11px; font-weight: 700; display: inline-flex;
+            align-items: center; justify-content: center; flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden text-sm">
+
+<aside id="sidebar" class="w-72 bg-[var(--sidebar-bg)] border-r border-card-border flex flex-col h-full z-30 shrink-0">
+    <div class="p-5 border-b border-card-border">
+        <h1 class="text-base font-bold flex items-center gap-2">
+            <i class="fa-brands fa-linux text-term-cyan"></i>
+            LINUX <span class="text-term-cyan">OMNIBUS</span>
+        </h1>
+        <p class="text-[10px] text-[var(--muted)] font-mono mt-1 tracking-wide uppercase">Sıfırdan · DevOps · Güvenlik · Job-ready</p>
+        <div class="progress-bar mt-3 rounded overflow-hidden"><span id="progress-fill" style="width:0%"></span></div>
+        <p class="text-[10px] text-[var(--muted)] mt-1"><span id="progress-label">0</span> / <span id="progress-total">0</span> ders · <span id="track-label">Tüm müfredat</span></p>
+    </div>
+    <nav id="sidebar-nav" class="flex-1 overflow-y-auto scroll-custom py-3"></nav>
+    <div class="p-4 border-t border-card-border text-[10px] text-[var(--muted)] font-mono">
+        Omnibus · Türkçe anlatım · / ile ara · #hash yer imi
+    </div>
+</aside>
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 md:hidden"></div>
+
+<main class="flex-1 overflow-y-auto scroll-custom bg-term-bg relative flex flex-col min-w-0">
+    <header class="sticky top-0 z-20 glass-panel px-4 sm:px-8 py-3 border-b border-card-border flex flex-wrap gap-3 justify-between items-center">
+        <div class="flex items-center gap-3 min-w-0">
+            <button id="open-sidebar" class="md:hidden text-[var(--muted)]" aria-label="Menü"><i class="fa-solid fa-bars"></i></button>
+            <div class="min-w-0">
+                <span class="text-[10px] font-mono text-[var(--muted)]">OMNIBUS /</span>
+                <h2 id="current-section-title" class="text-sm sm:text-base font-semibold truncate">Giriş</h2>
+            </div>
+        </div>
+        <div class="flex gap-2 items-center flex-1 sm:flex-none justify-end">
+            <div class="relative flex-1 sm:flex-none max-w-md">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-[var(--muted)] text-xs"></i>
+                <input type="text" id="globalSearch" placeholder="/ ile ara · docker, hardening, disk dolu…"
+                       class="bg-card-dark border border-card-border rounded-md pl-9 pr-3 py-1.5 text-xs w-full sm:w-80 outline-none focus:border-term-cyan text-[var(--text)] font-mono placeholder:text-[var(--muted)]">
+            </div>
+            <button id="theme-toggle" class="border border-card-border rounded-md px-2.5 py-1.5 text-xs text-[var(--muted)]" title="Tema">
+                <i class="fa-solid fa-moon" id="theme-icon"></i>
+            </button>
+        </div>
+    </header>
+
+    <div id="content-container" class="p-4 sm:p-8 max-w-3xl mx-auto w-full flex-1 pb-24">
+        <!-- rendered by app.js -->
+    </div>
+</main>
+
+<script src="content.js"></script>
+<script src="content-more.js"></script>
+<script src="tracks.js"></script>
+<script src="interview.js"></script>
+<script src="encyclopedia.js"></script>
+<script src="encyclopedia-more.js"></script>
+<script src="encyclopedia-devops.js"></script>
+<script src="kali-arsenal.js"></script>
+<script src="kali-deep.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
