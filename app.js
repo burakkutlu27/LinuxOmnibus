@@ -4,6 +4,8 @@
     const THEME_KEY = 'linux-omnibus-theme';
     const TRACK_KEY = 'linux-omnibus-track';
     const INTERVIEW_KNOWN_KEY = 'linux-omnibus-interview-known';
+    const QUIZ_KEY = 'linux-omnibus-quiz';
+    const EXPORT_KEYS = [READ_KEY, THEME_KEY, TRACK_KEY, INTERVIEW_KNOWN_KEY, QUIZ_KEY];
     const LEGACY_KEYS = {
         [READ_KEY]: 'linux-bible-read',
         [THEME_KEY]: 'linux-bible-theme',
@@ -98,6 +100,73 @@
         const s = getRead();
         s.add(lessonId);
         saveRead(s);
+    }
+
+    function getQuizScores() {
+        try { return JSON.parse(storageGet(QUIZ_KEY) || '{}'); }
+        catch { return {}; }
+    }
+    function saveQuizScore(lessonId, payload) {
+        const all = getQuizScores();
+        all[lessonId] = payload;
+        storageSet(QUIZ_KEY, JSON.stringify(all));
+    }
+
+    function exportProgress() {
+        const data = {};
+        EXPORT_KEYS.forEach(k => {
+            const v = storageGet(k);
+            if (v != null) data[k] = v;
+        });
+        return {
+            version: 1,
+            app: 'linux-omnibus',
+            exportedAt: new Date().toISOString(),
+            data
+        };
+    }
+
+    function importProgress(payload) {
+        if (!payload || typeof payload !== 'object') throw new Error('Geçersiz dosya');
+        const data = payload.data && typeof payload.data === 'object' ? payload.data : payload;
+        let n = 0;
+        EXPORT_KEYS.forEach(k => {
+            if (data[k] == null) return;
+            storageSet(k, typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k]));
+            n++;
+        });
+        if (!n) throw new Error('İçe aktarılacak veri yok');
+        state.trackId = getTrackId();
+        const theme = storageGet(THEME_KEY);
+        if (theme === 'light' || theme === 'dark') applyTheme(theme === 'light');
+        renderSidebar();
+        updateProgress();
+        applyRouteFromHash();
+        return n;
+    }
+
+    function setupExportImport() {
+        $('#export-progress')?.addEventListener('click', () => {
+            const blob = new Blob([JSON.stringify(exportProgress(), null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'linux-omnibus-progress.json';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        });
+        $('#import-progress')?.addEventListener('click', () => $('#import-progress-file')?.click());
+        $('#import-progress-file')?.addEventListener('change', async (e) => {
+            const file = e.target.files && e.target.files[0];
+            e.target.value = '';
+            if (!file) return;
+            try {
+                const text = await file.text();
+                const n = importProgress(JSON.parse(text));
+                alert('İçe aktarıldı: ' + n + ' alan. İlerleme, tema, yol, mülakat ve quiz skorları güncellendi.');
+            } catch (err) {
+                alert('İçe aktarma başarısız: ' + (err && err.message ? err.message : 'bilinmeyen hata'));
+            }
+        });
     }
 
     function allLessonIds() {
@@ -404,6 +473,10 @@
             ${lesson.widget === 'chmod' ? renderChmodWidget() : ''}
             ${lesson.widget === 'cron' ? renderCronWidget() : ''}
             ${lesson.widget === 'fhs' ? renderFhsWidget() : ''}
+            ${lesson.widget === 'cidr' ? renderCidrWidget() : ''}
+            ${lesson.widget === 'docker' ? renderDockerWidget() : ''}
+
+            ${renderQuizBlock(lesson)}
 
             ${interview ? `
                 <h4 class="font-sans text-sm font-semibold mt-8 mb-3 text-[var(--text)]">Senior Mülakat Köşesi</h4>
@@ -416,6 +489,43 @@
                 </button>
             </div>
         </article>`;
+    }
+
+    function renderQuizBlock(lesson) {
+        const items = lesson.quiz || [];
+        if (!items.length) return '';
+        const prev = getQuizScores()[lesson.id];
+        const prevLabel = prev
+            ? `<span class="tag-badge bg-term-green/10 text-term-green border border-term-green/25">${prev.correct}/${prev.total} son skor</span>`
+            : '';
+        const qs = items.map((item, qi) => {
+            const choices = (item.choices || []).map((c, ci) => `
+                <label class="quiz-choice flex gap-2 items-start p-2.5 rounded border border-card-border cursor-pointer hover:border-term-cyan/50 text-xs">
+                    <input type="radio" class="mt-0.5 shrink-0" name="quiz-${escapeAttr(lesson.id)}-${qi}" value="${ci}">
+                    <span>${escapeHtml(c)}</span>
+                </label>
+            `).join('');
+            return `
+            <div class="quiz-item mb-4" data-qi="${qi}" data-answer="${item.answer}" data-explain="${escapeAttr(item.explain || '')}">
+                <p class="text-xs font-semibold text-[var(--text)] mb-2 font-sans">${qi + 1}. ${escapeHtml(item.q)}</p>
+                <div class="space-y-1.5">${choices}</div>
+                <p class="quiz-feedback hidden mt-2 text-xs leading-relaxed"></p>
+            </div>`;
+        }).join('');
+        return `
+        <div class="quiz-block mt-8 p-4 rounded border border-card-border" data-quiz-lesson="${escapeAttr(lesson.id)}" data-quiz-total="${items.length}">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <h4 class="font-sans text-sm font-semibold text-[var(--text)]">Mini Quiz</h4>
+                ${prevLabel}
+            </div>
+            <p class="text-xs text-[var(--muted)] mb-4">Okuduklarını pekiştir — cevapları seçip kontrol et.</p>
+            ${qs}
+            <div class="flex flex-wrap gap-2 items-center mt-2">
+                <button type="button" class="quiz-check text-xs px-3 py-1.5 rounded border border-term-cyan/40 text-term-cyan hover:bg-term-cyan/10 font-semibold">Cevapları kontrol et</button>
+                <button type="button" class="quiz-reset text-xs px-3 py-1.5 rounded border border-card-border text-[var(--muted)]">Sıfırla</button>
+                <span class="quiz-score text-xs text-[var(--muted)]"></span>
+            </div>
+        </div>`;
     }
 
     function renderChmodWidget() {
@@ -477,6 +587,49 @@
             <h4 class="font-sans text-sm font-semibold mb-3">İnteraktif FHS Haritası</h4>
             <div class="grid grid-cols-3 sm:grid-cols-4 gap-2" id="fhs-grid"></div>
             <div id="fhs-detail" class="terminal-box p-3 rounded mt-3 text-xs text-gray-300">Bir dizin seçin…</div>
+        </div>`;
+    }
+
+    function renderCidrWidget() {
+        return `
+        <div class="mt-6 p-4 rounded border border-card-border bg-[var(--term-bg)] cidr-widget">
+            <h4 class="font-sans text-sm font-semibold mb-1">CIDR Hesaplayıcı</h4>
+            <p class="text-xs text-[var(--muted)] mb-4">Örn. <code class="text-term-cyan">192.168.1.0/24</code> — ağ, broadcast, kullanılabilir host aralığı.</p>
+            <label class="text-xs block mb-3"><span class="text-[var(--muted)]">CIDR</span>
+                <input type="text" class="cidr-input mt-1 block w-full max-w-xs bg-card-dark border border-card-border rounded px-2 py-1.5 font-mono text-term-cyan outline-none focus:border-term-cyan" value="192.168.1.0/24">
+            </label>
+            <div class="cidr-out terminal-box p-3 rounded font-mono text-[11px] text-gray-300 space-y-1"></div>
+        </div>`;
+    }
+
+    function renderDockerWidget() {
+        return `
+        <div class="mt-6 p-4 rounded border border-card-border docker-widget">
+            <h4 class="font-sans text-sm font-semibold mb-1">docker run Builder</h4>
+            <p class="text-xs text-[var(--muted)] mb-4">Bayrakları seç → kopyalanabilir komut üret.</p>
+            <div class="grid sm:grid-cols-2 gap-3 text-xs mb-3">
+                <label>İmaj
+                    <input type="text" class="docker-image mt-1 w-full bg-[var(--term-bg)] border border-card-border rounded px-2 py-1.5 font-mono" value="nginx:alpine">
+                </label>
+                <label>Konteyner adı
+                    <input type="text" class="docker-name mt-1 w-full bg-[var(--term-bg)] border border-card-border rounded px-2 py-1.5 font-mono" value="web">
+                </label>
+                <label>Host port
+                    <input type="text" class="docker-host-port mt-1 w-full bg-[var(--term-bg)] border border-card-border rounded px-2 py-1.5 font-mono" value="8080">
+                </label>
+                <label>Konteyner port
+                    <input type="text" class="docker-ctr-port mt-1 w-full bg-[var(--term-bg)] border border-card-border rounded px-2 py-1.5 font-mono" value="80">
+                </label>
+            </div>
+            <div class="flex flex-wrap gap-3 text-xs mb-3">
+                <label class="flex gap-1.5 items-center"><input type="checkbox" class="docker-detach" checked> -d (arka plan)</label>
+                <label class="flex gap-1.5 items-center"><input type="checkbox" class="docker-rm" checked> --rm</label>
+                <label class="flex gap-1.5 items-center"><input type="checkbox" class="docker-port" checked> -p port map</label>
+            </div>
+            <div class="terminal-box p-3 rounded font-mono text-[11px] flex justify-between gap-2 items-start">
+                <code class="docker-cmd text-term-green break-all">docker run --rm -d -p 8080:80 --name web nginx:alpine</code>
+                <button type="button" class="docker-copy shrink-0 text-[10px] text-gray-500 hover:text-term-cyan px-1.5 py-0.5 rounded border border-transparent hover:border-card-border" title="Kopyala">⎘</button>
+            </div>
         </div>`;
     }
 
@@ -599,9 +752,146 @@
                 renderChapter();
             });
         });
+        bindQuizUi();
         setupPermCalculator();
         setupCronBuilder();
         setupFhsMap();
+        setupCidrWidgets();
+        setupDockerWidgets();
+    }
+
+    function bindQuizUi() {
+        $all('.quiz-block').forEach(block => {
+            const lessonId = block.dataset.quizLesson;
+            const total = +block.dataset.quizTotal || 0;
+            const scoreEl = block.querySelector('.quiz-score');
+            const check = () => {
+                let correct = 0;
+                $all('.quiz-item', block).forEach(item => {
+                    const answer = +item.dataset.answer;
+                    const picked = item.querySelector('input[type=radio]:checked');
+                    const fb = item.querySelector('.quiz-feedback');
+                    const explain = item.dataset.explain || '';
+                    $all('.quiz-choice', item).forEach((lab, i) => {
+                        lab.classList.remove('border-term-green', 'border-term-red', 'bg-term-green/10', 'bg-term-red/10');
+                        if (i === answer) lab.classList.add('border-term-green', 'bg-term-green/10');
+                    });
+                    if (!picked) {
+                        if (fb) {
+                            fb.classList.remove('hidden', 'text-term-green');
+                            fb.classList.add('text-term-amber');
+                            fb.textContent = 'Bu soruyu cevaplamadın. Doğru seçenek yeşil işaretli.';
+                        }
+                        return;
+                    }
+                    const idx = +picked.value;
+                    const ok = idx === answer;
+                    if (ok) correct++;
+                    const wrongLab = picked.closest('.quiz-choice');
+                    if (!ok && wrongLab) wrongLab.classList.add('border-term-red', 'bg-term-red/10');
+                    if (fb) {
+                        fb.classList.remove('hidden');
+                        fb.classList.toggle('text-term-green', ok);
+                        fb.classList.toggle('text-term-red', !ok);
+                        fb.textContent = (ok ? 'Doğru. ' : 'Yanlış. ') + explain;
+                    }
+                });
+                if (scoreEl) scoreEl.textContent = `Skor: ${correct} / ${total}`;
+                saveQuizScore(lessonId, { correct, total, at: new Date().toISOString() });
+                if (correct === total && total > 0) markRead(lessonId);
+            };
+            const reset = () => {
+                $all('input[type=radio]', block).forEach(r => { r.checked = false; });
+                $all('.quiz-choice', block).forEach(lab => {
+                    lab.classList.remove('border-term-green', 'border-term-red', 'bg-term-green/10', 'bg-term-red/10');
+                });
+                $all('.quiz-feedback', block).forEach(fb => {
+                    fb.classList.add('hidden');
+                    fb.textContent = '';
+                });
+                if (scoreEl) scoreEl.textContent = '';
+            };
+            block.querySelector('.quiz-check')?.addEventListener('click', check);
+            block.querySelector('.quiz-reset')?.addEventListener('click', reset);
+        });
+    }
+
+    function ipv4ToInt(parts) {
+        return ((parts[0] << 24) >>> 0) + (parts[1] << 16) + (parts[2] << 8) + parts[3];
+    }
+    function intToIpv4(n) {
+        return [(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join('.');
+    }
+
+    function setupCidrWidgets() {
+        $all('.cidr-widget').forEach(box => {
+            const input = box.querySelector('.cidr-input');
+            const out = box.querySelector('.cidr-out');
+            if (!input || !out) return;
+            const update = () => {
+                const raw = (input.value || '').trim();
+                const m = raw.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\/(\d{1,2})$/);
+                if (!m) {
+                    out.innerHTML = '<span class="text-term-red">Geçerli CIDR girin (örn. 10.0.0.0/8).</span>';
+                    return;
+                }
+                const octets = [+m[1], +m[2], +m[3], +m[4]];
+                const prefix = +m[5];
+                if (octets.some(o => o > 255) || prefix > 32) {
+                    out.innerHTML = '<span class="text-term-red">Oktet 0–255, prefix 0–32 olmalı.</span>';
+                    return;
+                }
+                const mask = prefix === 0 ? 0 : ((0xFFFFFFFF << (32 - prefix)) >>> 0);
+                const ip = ipv4ToInt(octets);
+                const network = (ip & mask) >>> 0;
+                const broadcast = (network | (~mask >>> 0)) >>> 0;
+                const hostCount = prefix >= 31 ? (prefix === 32 ? 1 : 2) : (broadcast - network - 1);
+                const first = prefix >= 31 ? network : network + 1;
+                const last = prefix >= 31 ? broadcast : broadcast - 1;
+                out.innerHTML = `
+                    <div>Ağ: <span class="text-term-cyan">${intToIpv4(network)}/${prefix}</span></div>
+                    <div>Maske: <span class="text-term-amber">${intToIpv4(mask)}</span> <span class="text-gray-500">(${prefix} bit)</span></div>
+                    <div>Broadcast: <span class="text-term-cyan">${intToIpv4(broadcast)}</span></div>
+                    <div>Host aralığı: <span class="text-term-green">${intToIpv4(first)} – ${intToIpv4(last)}</span></div>
+                    <div class="text-gray-500">Kullanılabilir host ≈ ${hostCount}</div>`;
+            };
+            input.addEventListener('input', update);
+            update();
+        });
+    }
+
+    function setupDockerWidgets() {
+        $all('.docker-widget').forEach(box => {
+            const cmdEl = box.querySelector('.docker-cmd');
+            const update = () => {
+                const image = (box.querySelector('.docker-image')?.value || 'nginx:alpine').trim() || 'nginx:alpine';
+                const name = (box.querySelector('.docker-name')?.value || '').trim();
+                const hp = (box.querySelector('.docker-host-port')?.value || '8080').trim();
+                const cp = (box.querySelector('.docker-ctr-port')?.value || '80').trim();
+                const parts = ['docker', 'run'];
+                if (box.querySelector('.docker-rm')?.checked) parts.push('--rm');
+                if (box.querySelector('.docker-detach')?.checked) parts.push('-d');
+                if (box.querySelector('.docker-port')?.checked && hp && cp) parts.push('-p', `${hp}:${cp}`);
+                if (name) parts.push('--name', name);
+                parts.push(image);
+                if (cmdEl) cmdEl.textContent = parts.join(' ');
+            };
+            $all('input', box).forEach(el => el.addEventListener('input', update));
+            $all('input[type=checkbox]', box).forEach(el => el.addEventListener('change', update));
+            box.querySelector('.docker-copy')?.addEventListener('click', async (e) => {
+                const btn = e.currentTarget;
+                const text = cmdEl?.textContent || '';
+                try {
+                    await navigator.clipboard.writeText(text);
+                    btn.textContent = '✓';
+                    setTimeout(() => { btn.textContent = '⎘'; }, 1200);
+                } catch {
+                    btn.textContent = '!';
+                    setTimeout(() => { btn.textContent = '⎘'; }, 1200);
+                }
+            });
+            update();
+        });
     }
 
     let syncingOctal = false;
@@ -1851,6 +2141,10 @@
         renderSidebar();
         updateProgress();
         setupTheme();
+        setupExportImport();
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').catch(() => { /* offline opsiyonel */ });
+        }
         $('#open-sidebar')?.addEventListener('click', openMobile);
         $('#sidebar-overlay')?.addEventListener('click', closeMobile);
         window.addEventListener('hashchange', () => applyRouteFromHash());

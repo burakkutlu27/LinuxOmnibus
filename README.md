@@ -17,7 +17,7 @@ npx serve .
 
 Ardından `http://localhost:3000` (veya seçtiğin port) → `index.html`.
 
-CDN’e ihtiyaç var (Tailwind, Font Awesome, Google Fonts). Offline paket değil.
+İlk yüklemede CDN gerekir (Tailwind, Font Awesome, Google Fonts). Service worker bunları ve yerel JS’i önbelleğe alır; sonra çoğu içerik offline okunabilir. `file://` ile açınca PWA çalışmaz — lokal sunucu kullan.
 
 ## İçinde ne var?
 
@@ -56,8 +56,12 @@ Kategori bazlı araç envanteri (recon → exploit → forensics…) ve 16 araç
 
 - Global arama (`/` kısayolu)
 - Okuma ilerlemesi (ders bazlı)
+- Ders sonu **mini-quiz** (seçmeli sorular, skor localStorage’da; tam doğru → okundu)
+- İnteraktif widget’lar: chmod, cron, FHS, **CIDR**, **docker run** builder
+- İlerleme **dışa / içe aktar** (JSON: okunan dersler, tema, yol, mülakat “biliyorum”, quiz skorları)
 - Açık/koyu tema
 - Hash route ile yer imi (`#ch15/orta` gibi)
+- **PWA / offline**: `manifest.webmanifest` + service worker — ilk ziyaretten sonra app shell ve CDN varlıkları önbelleğe alınır (HTTPS veya localhost gerekir)
 
 ## Dosya haritası
 
@@ -71,9 +75,22 @@ encyclopedia*.js        # komut ansiklopedisi
 kali-arsenal.js         # araç kategorileri
 kali-deep.js            # araç derin modülleri
 interview.js            # mülakat soruları
+manifest.webmanifest    # PWA manifest
+sw.js                   # offline cache
+LICENSE                 # MIT
 ```
 
 İçerik düz JS dizilerinde (`window.BIBLE`, `window.COMMANDS`, …). Yeni bölüm eklemek = ilgili dosyaya obje push etmek.
+
+Ders sonu quiz eklemek için lesson objesine:
+
+```js
+quiz: [
+  { q: 'Soru?', choices: ['A', 'B', 'C', 'D'], answer: 1, explain: 'Kısa açıklama' }
+]
+```
+
+`answer` doğru şıkkın 0-tabanlı indeksidir. Widget için `widget: 'chmod' | 'cron' | 'fhs' | 'cidr' | 'docker'`.
 
 ## Etik not
 
@@ -81,4 +98,4 @@ Güvenlik ve Kali içerikleri yalnızca kendi laboratuvarın veya yazılı izinl
 
 ## Lisans
 
-Şimdilik belirtilmedi. Kullanım/dağıtım için bir LICENSE eklemek istersen PR veya issue aç.
+[MIT](LICENSE) — yazılım ve müfredat dosyaları bu lisans altındadır.

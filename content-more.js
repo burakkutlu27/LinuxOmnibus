@@ -359,7 +359,32 @@
                     { cmd: 'docker stop web', note: 'Durdur' }
                 ],
                 exercise: 'nginx’i çalıştırıp tarayıcı/curl ile görün, log’a bakın, stop edin.',
-                crisis: 'Port already allocated — ss -tlnp ile kim tutuyor bul.'
+                crisis: 'Port already allocated — ss -tlnp ile kim tutuyor bul.',
+                widget: 'docker',
+                quiz: [
+                    {
+                        q: '<code>docker run -d</code> ne yapar?',
+                        choices: [
+                            'İmajı siler',
+                            'Konteyneri arka planda (detached) çalıştırır',
+                            'Sadece Dockerfile doğrular',
+                            'Host’u yeniden başlatır'
+                        ],
+                        answer: 1,
+                        explain: '-d detached mode; log için docker logs kullanırsınız.'
+                    },
+                    {
+                        q: '<code>-p 8080:80</code> ne anlama gelir?',
+                        choices: [
+                            'CPU limiti',
+                            'Host 8080 → konteyner 80 port eşlemesi',
+                            'İmaj sürümü 8080',
+                            '80 kullanıcı UID’si'
+                        ],
+                        answer: 1,
+                        explain: 'hostPort:containerPort yayınlama (publish).'
+                    }
+                ]
             }
         ],
         orta: [

@@ -6,10 +6,15 @@
     <title>Linux Omnibus — Sıfırdan DevOps &amp; Güvenliğe</title>
     <meta name="description" content="Türkçe Linux müfredatı: terminal, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, hardening, Kali ve kriz runbook’ları.">
     <meta name="theme-color" content="#0B0E14">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Linux Omnibus">
     <meta property="og:title" content="Linux Omnibus">
     <meta property="og:description" content="Ansiklopedik, job-ready Linux · DevOps · Siber güvenlik müfredatı.">
     <meta property="og:type" content="website">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐧%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
@@ -127,8 +132,13 @@
         <p class="text-[10px] text-[var(--muted)] mt-1"><span id="progress-label">0</span> / <span id="progress-total">0</span> ders · <span id="track-label">Tüm müfredat</span></p>
     </div>
     <nav id="sidebar-nav" class="flex-1 overflow-y-auto scroll-custom py-3"></nav>
-    <div class="p-4 border-t border-card-border text-[10px] text-[var(--muted)] font-mono">
-        Omnibus · Türkçe anlatım · / ile ara · #hash yer imi
+    <div class="p-4 border-t border-card-border space-y-2">
+        <div class="flex gap-2">
+            <button type="button" id="export-progress" class="flex-1 text-[10px] px-2 py-1.5 rounded border border-card-border text-[var(--muted)] hover:border-term-cyan hover:text-term-cyan" title="İlerlemeyi JSON indir">Dışa aktar</button>
+            <button type="button" id="import-progress" class="flex-1 text-[10px] px-2 py-1.5 rounded border border-card-border text-[var(--muted)] hover:border-term-cyan hover:text-term-cyan" title="JSON’dan geri yükle">İçe aktar</button>
+            <input type="file" id="import-progress-file" accept="application/json,.json" class="hidden">
+        </div>
+        <p class="text-[10px] text-[var(--muted)] font-mono">Omnibus · / ara · #hash · MIT</p>
     </div>
 </aside>
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 md:hidden"></div>

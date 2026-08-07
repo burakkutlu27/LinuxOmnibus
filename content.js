@@ -30,6 +30,30 @@ window.BIBLE = [
                 exercise: 'Kendi bilgisayarınızda şunu sorun: Hangi işletim sistemini kullanıyorum? Windows / macOS / Linux? Cevabı yazın. Sonraki derste Linux’a nasıl gireceğinizi konuşacağız.',
                 interview: [
                     { q: 'Kernel ile işletim sistemi farkı nedir?', a: 'Kernel, donanım ile yazılımlar arasındaki temel yöneticidir. “İşletim sistemi” genelde kernel + sistem kütüphaneleri + araçlar + kullanıcı arayüzü bütününü kasteder. Linux kelimesi dar anlamda sadece kernel’i ifade eder.' }
+                ],
+                quiz: [
+                    {
+                        q: 'Kernel’in temel görevi nedir?',
+                        choices: [
+                            'Sadece masaüstü temalarını yönetmek',
+                            'Programların donanıma güvenli ve adil erişimini sağlamak',
+                            'Yalnızca web tarayıcısını çalıştırmak',
+                            'İnternet aboneliğini faturalandırmak'
+                        ],
+                        answer: 1,
+                        explain: 'Kernel, CPU/RAM/disk/ağ gibi kaynakları süreçler arasında yönetir.'
+                    },
+                    {
+                        q: '“Linux” dar anlamda neyi ifade eder?',
+                        choices: [
+                            'Tüm masaüstü uygulamalarını',
+                            'Sadece paket yöneticisini',
+                            'Çekirdeği (kernel)',
+                            'Yalnızca Kali dağıtımını'
+                        ],
+                        answer: 2,
+                        explain: 'Linux kelimesi dar anlamda çekirdektir; dağıtım = kernel + userspace araçları.'
+                    }
                 ]
             },
             {
@@ -48,7 +72,31 @@ window.BIBLE = [
                 ],
                 exercise: 'Ubuntu, Kali ve “sunucu Linux” kelimelerini not edin. İleride Kali’yi güvenlik laboratuvarı; Ubuntu/Debian’ı öğrenme ve sunucu için kullanacağız.',
                 kernel: 'Farklı distrolar aynı Linux kernel’ini (veya yakın sürümünü) kullanabilir; fark userspace’tedir: init sistemi, paket yöneticisi (apt/dnf), varsayılan servisler.',
-                crisis: '“Prod’da RHEL var, ben sadece Ubuntu biliyorum” paniklerini azaltır — komutlar %80 ortaktır; farkları bilinçli öğrenirsiniz.'
+                crisis: '“Prod’da RHEL var, ben sadece Ubuntu biliyorum” paniklerini azaltır — komutlar %80 ortaktır; farkları bilinçli öğrenirsiniz.',
+                quiz: [
+                    {
+                        q: 'Ubuntu, Kali ve RHEL birbirinden nasıl ayrılır?',
+                        choices: [
+                            'Hepsi tamamen farklı kernel kullanır',
+                            'Aynı çekirdek ailesi; paketler, varsayılanlar ve felsefe farklıdır (distro)',
+                            'Sadece masaüstü rengi farklıdır',
+                            'Hiçbiri sunucuda çalışmaz'
+                        ],
+                        answer: 1,
+                        explain: 'Distro = aynı Linux çekirdeği üzerine farklı userspace seçimleri.'
+                    },
+                    {
+                        q: 'Linux’un operasyonel gücünü en iyi hangi üçlü özetler?',
+                        choices: [
+                            'Kapalı kaynak, sadece GUI, tek kullanıcı',
+                            'Açık kaynak, uzak yönetim (SSH), otomasyon',
+                            'Yalnızca oyun, Wi‑Fi, yazıcı sürücüsü',
+                            'Antivirüs, firewall lisansı, telefon desteği'
+                        ],
+                        answer: 1,
+                        explain: 'Açık kaynak + SSH + metin/otomasyon Linux’u sunucu dünyasının omurgası yapar.'
+                    }
+                ]
             },
             {
                 id: 'ch0-b3',
@@ -69,7 +117,20 @@ window.BIBLE = [
                     'İlk açılışta kullanıcı adı ve şifrenizi not edin (root ile normal kullanıcı farkını sonra öğreneceksiniz).',
                     'Terminal uygulamasını bulun ve açın — siyah/yeşil ekran sizi korkutmasın; bu sizin direksiyonunuz.'
                 ],
-                exercise: 'Terminali açıp sadece şunu yazın ve Enter’a basın: <code>whoami</code> — ekranda kullanıcı adınız çıkmalı. Çıktıysa laboratuvarınız hazır.'
+                exercise: 'Terminali açıp sadece şunu yazın ve Enter’a basın: <code>whoami</code> — ekranda kullanıcı adınız çıkmalı. Çıktıysa laboratuvarınız hazır.',
+                quiz: [
+                    {
+                        q: 'Güvenli pratik için en doğru ortam hangisidir?',
+                        choices: [
+                            'Başkasının prod sunucusu',
+                            'İzinsiz tarama yapılan rastgele IP’ler',
+                            'Kendi VM / WSL / izinli lab ortamınız',
+                            'Sadece ekran görüntüsü izlemek'
+                        ],
+                        answer: 2,
+                        explain: 'Kırabileceğiniz ve yasal olan lab şarttır; izinsiz test suçtur.'
+                    }
+                ]
             }
         ],
         orta: [
@@ -156,7 +217,31 @@ window.BIBLE = [
                 ],
                 exercise: '<code>echo</code> ile kendi adınızı yazdırın. Sonra <code>date</code> yazın — tarih/saat gelmeli.',
                 kernel: 'Shell, Enter’a basınca komutu parse eder, gerekirse yeni süreç <code>fork</code>+<code>exec</code> ile başlatır.',
-                crisis: 'SSH ile sunucuya bağlandığınızda masaüstü yoktur; sadece shell vardır. Bu bölüm o anın panik atağını önler.'
+                crisis: 'SSH ile sunucuya bağlandığınızda masaüstü yoktur; sadece shell vardır. Bu bölüm o anın panik atağını önler.',
+                quiz: [
+                    {
+                        q: 'Prompt’taki <code>$</code> genelde neyi gösterir?',
+                        choices: [
+                            'Root oturumu',
+                            'Normal kullanıcı shell’i',
+                            'Ağ bağlantısı yok',
+                            'Disk dolu'
+                        ],
+                        answer: 1,
+                        explain: 'Çoğu distroda $ normal kullanıcı, # root prompt’udur.'
+                    },
+                    {
+                        q: 'Terminal ile shell farkı nedir?',
+                        choices: [
+                            'Aynı şeydir, kelime oyunu',
+                            'Terminal metin penceresi; shell yazdığınızı yorumlayan programdır',
+                            'Shell sadece GUI’dir',
+                            'Terminal yalnızca paket kurar'
+                        ],
+                        answer: 1,
+                        explain: 'Terminal emülatörü pencere; Bash/Zsh gibi shell komutu çalıştırır.'
+                    }
+                ]
             },
             {
                 id: 'ch1-b2',
@@ -180,7 +265,31 @@ window.BIBLE = [
                 ],
                 exercise: '<code>man date</code> içinde “format” veya “%” geçen bir yeri bulun. Sonra <code>date +%F</code> deneyin.',
                 kernel: 'Shell argv listesini oluşturur; program <code>main(argc, argv)</code> ile alır. Kernel sadece süreci başlatır — bayrakları program kendisi yorumlar.',
-                crisis: 'Dokümantasyonsuz araçta panik yerine <code>man</code> / <code>--help</code> refleksi — gece 03:00 ticket’larında hayat kurtarır.'
+                crisis: 'Dokümantasyonsuz araçta panik yerine <code>man</code> / <code>--help</code> refleksi — gece 03:00 ticket’larında hayat kurtarır.',
+                quiz: [
+                    {
+                        q: '<code>ls -l /home</code> satırında <code>-l</code> nedir?',
+                        choices: [
+                            'Argüman (hedef dizin)',
+                            'Seçenek / flag (uzun format)',
+                            'Shell prompt’u',
+                            'Exit kodu'
+                        ],
+                        answer: 1,
+                        explain: '-l seçenektir; /home argümandır (hangi dizinin listeleneceği).'
+                    },
+                    {
+                        q: 'Takıldığınızda ilk bakılacak yardım komutu?',
+                        choices: [
+                            'rm -rf /',
+                            'man komut veya komut --help',
+                            'reboot',
+                            'chmod 777'
+                        ],
+                        answer: 1,
+                        explain: 'man ve --help, ezber yerine doğru reflektir.'
+                    }
+                ]
             },
             {
                 id: 'ch1-b3',
@@ -215,7 +324,31 @@ window.BIBLE = [
                 ],
                 exercise: '<code>/var</code> dizinine gidip içeriğe bakın, sonra home’a dönün. Her adımda <code>pwd</code> alın.',
                 kernel: '<code>cd</code> yeni program açmaz; shell kendi sürecinde <code>chdir()</code> syscall’ını çağırır. <code>pwd</code> çoğu zaman bu cwd’yi basar.',
-                crisis: 'Script yanlış dizinde çalışınca “dosya yok” hataları — her zaman mutlak yol veya bilinçli <code>cd</code>.'
+                crisis: 'Script yanlış dizinde çalışınca “dosya yok” hataları — her zaman mutlak yol veya bilinçli <code>cd</code>.',
+                quiz: [
+                    {
+                        q: '<code>pwd</code> ne işe yarar?',
+                        choices: [
+                            'Paket kurar',
+                            'Şu anki çalışma dizinini yazar',
+                            'Kullanıcı siler',
+                            'Firewall açar'
+                        ],
+                        answer: 1,
+                        explain: 'pwd = print working directory.'
+                    },
+                    {
+                        q: 'Prompt’taki <code>~</code> ne anlama gelir?',
+                        choices: [
+                            'Kök dizin /',
+                            'Home dizin kısayolu',
+                            'Geçici /tmp',
+                            'Sadece root’un evi'
+                        ],
+                        answer: 1,
+                        explain: '~ kullanıcı home dizinine genişler (/home/kullanici).'
+                    }
+                ]
             }
         ],
         orta: [
@@ -240,6 +373,30 @@ window.BIBLE = [
                 crisis: 'Dev log dosyasını editörle açmak yerine <code>grep|tail</code> ile daraltmak — sunucu RAM’ini kurtarır.',
                 interview: [
                     { q: 'stdout ile stderr farkı?', a: 'stdout (fd 1) normal çıktı; stderr (fd 2) hata/uyarı. Ayrı tutulur ki çıktıyı dosyaya alırken hataları ekranda görebilin veya tersi: <code>2>&1</code> ile birleştirilir.' }
+                ],
+                quiz: [
+                    {
+                        q: '<code>ls / | head -n 5</code> ifadesinde <code>|</code> ne yapar?',
+                        choices: [
+                            'Dosyayı siler',
+                            'Sol komutun çıktısını sağ komuta borular',
+                            'Root yetkisi verir',
+                            'Arka planda çalıştırır'
+                        ],
+                        answer: 1,
+                        explain: 'Pipe, stdout’u sonraki sürecin stdin’ine bağlar.'
+                    },
+                    {
+                        q: '<code>echo x &gt; dosya</code> ile <code>&gt;&gt;</code> farkı?',
+                        choices: [
+                            'İkisi de aynıdır',
+                            '> üzerine yazar; >> sona ekler',
+                            '>> her zaman hata basar',
+                            '> sadece root kullanır'
+                        ],
+                        answer: 1,
+                        explain: 'Tek > truncate/overwrite; >> append.'
+                    }
                 ]
             },
             {
@@ -589,7 +746,26 @@ window.BIBLE = [
                 ],
                 exercise: 'Bir dosya oluşturup sadece sizin okuyup yazabileceğiniz hale getirin (ipucu: 600).',
                 kernel: 'Erişim denemelerinde VFS inode izinlerini ve LSM (SELinux/AppArmor) kurallarını kontrol eder; red → EACCES.',
-                crisis: 'Web sunucusu dosyayı okuyamıyor — sahiplik www-data mi, izin 640 mı, SELinux mı?'
+                crisis: 'Web sunucusu dosyayı okuyamıyor — sahiplik www-data mi, izin 640 mı, SELinux mı?',
+                quiz: [
+                    {
+                        q: 'Oktal izinlerde r=?, w=?, x=?',
+                        choices: ['r=1, w=2, x=4', 'r=4, w=2, x=1', 'r=7, w=5, x=1', 'r=2, w=4, x=1'],
+                        answer: 1,
+                        explain: 'Klasik oktal: r=4, w=2, x=1; toplamlar 7/6/5/4…'
+                    },
+                    {
+                        q: '755 ne anlama gelir?',
+                        choices: [
+                            'Herkes yazabilir, kimse çalıştıramaz',
+                            'Sahip rwx; grup ve others r-x',
+                            'Sadece others tam yetki',
+                            'Dosya silinemez (sticky)'
+                        ],
+                        answer: 1,
+                        explain: '7=rwx sahip, 5=r-x grup, 5=r-x others — tipik script/dizin.'
+                    }
+                ]
             }
         ],
         orta: [
@@ -611,6 +787,25 @@ window.BIBLE = [
                 crisis: 'Secret .env 644 kalırsa diğer kullanıcılar okur — 600 yapın.',
                 interview: [
                     { q: '644 mü 755 mi?', a: 'Kaynak/config dosyası genelde 644; çalıştırılabilir script/binary ve public dizinler 755. Gizli anahtarlar 600.' }
+                ],
+                quiz: [
+                    {
+                        q: 'Gizli anahtar / .env için uygun izin genelde hangisi?',
+                        choices: ['777', '755', '644', '600'],
+                        answer: 3,
+                        explain: '600: sadece sahip okur/yazar; others göremez.'
+                    },
+                    {
+                        q: 'umask neyi etkiler?',
+                        choices: [
+                            'Sadece mevcut dosyaların sahibini',
+                            'Yeni oluşturulan dosya/dizinlerden düşülecek izin bitlerini',
+                            'Firewall kurallarını',
+                            'DNS çözümlemeyi'
+                        ],
+                        answer: 1,
+                        explain: 'umask, create sırasında varsayılan izinlerden bit düşürür (örn. 022 → dosya 644).'
+                    }
                 ]
             }
         ],
@@ -1007,10 +1202,11 @@ window.BIBLE = [
                 id: 'ch10-b1',
                 title: 'IP adresi ve arayüz — sıfırdan',
                 tags: 'ip addr ping',
-                search: 'ip addr ping dns',
+                search: 'ip addr ping dns CIDR subnet',
                 body: [
                     'Ağ arayüzü (eth0, ens33, wlan0) bir kapıdır. IP adresi o kapıya takılan numaradır. <code>ip addr</code> ile görürsünüz.',
-                    '<code>ping</code> “oraya varabiliyor muyum?” diye ICMP gönderir. DNS isim → IP çevirir (<code>/etc/resolv.conf</code>, systemd-resolved).'
+                    '<code>ping</code> “oraya varabiliyor muyum?” diye ICMP gönderir. DNS isim → IP çevirir (<code>/etc/resolv.conf</code>, systemd-resolved).',
+                    'Adresler sıkça <strong>CIDR</strong> ile yazılır: <code>192.168.1.10/24</code> → IP + prefix uzunluğu. /24 ≈ 254 kullanılabilir host; /32 tek host. Aşağıdaki hesaplayıcıyla ağ ve broadcast’i görün.'
                 ],
                 commands: [
                     'ip addr',
@@ -1018,9 +1214,34 @@ window.BIBLE = [
                     'ping -c 3 1.1.1.1',
                     'cat /etc/resolv.conf'
                 ],
+                widget: 'cidr',
                 crisis: 'DNS bozuk: ping 1.1.1.1 olur, ping google.com olmaz.',
                 interview: [
                     { q: 'Default gateway nedir?', a: 'Kendi alt ağınızda olmayan hedeflere trafiği ileten kapı (route tablosundaki default via).' }
+                ],
+                quiz: [
+                    {
+                        q: 'ping 1.1.1.1 olur ama ping google.com olmazsa ilk şüphe?',
+                        choices: [
+                            'Disk dolu',
+                            'DNS çözümleme sorunu',
+                            'SUID binary',
+                            'umask yanlış'
+                        ],
+                        answer: 1,
+                        explain: 'IP’ye ulaşım var, isim çözülmüyorsa DNS (resolv/systemd-resolved) bakılır.'
+                    },
+                    {
+                        q: '<code>192.168.1.0/24</code> ifadesinde /24 neyi belirtir?',
+                        choices: [
+                            'Port numarası',
+                            'Ağ maskesi / prefix uzunluğu (alt ağ boyutu)',
+                            'TTL değeri',
+                            'VLAN kimliği'
+                        ],
+                        answer: 1,
+                        explain: 'CIDR prefix: kaç bit ağ adresi — /24 klasik Class C boyutu.'
+                    }
                 ]
             }
         ],
