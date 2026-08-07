@@ -1,5 +1,5 @@
 /* Linux Omnibus — offline cache (app shell + içerik + CDN varlıkları) */
-const CACHE = 'linux-omnibus-v1';
+const CACHE = 'linux-omnibus-v2';
 const APP_SHELL = [
   './index.html',
   './app.js',
@@ -14,7 +14,10 @@ const APP_SHELL = [
   './kali-deep.js',
   './manifest.webmanifest',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './og-image.jpg',
+  './robots.txt',
+  './sitemap.xml'
 ];
 
 self.addEventListener('install', (event) => {

@@ -1,0 +1,5 @@
+# Linux Omnibus — https://burakkutlu27.github.io/LinuxOmnibus/
+User-agent: *
+Allow: /
+
+Sitemap: https://burakkutlu27.github.io/LinuxOmnibus/sitemap.xml

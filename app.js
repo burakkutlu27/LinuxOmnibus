@@ -12,6 +12,10 @@
         [TRACK_KEY]: 'linux-bible-track',
         [INTERVIEW_KNOWN_KEY]: 'linux-bible-interview-known'
     };
+    const SPECIAL_ROUTES = ['encyclopedia', 'kali', 'roadmap', 'tracks', 'interview'];
+    const DEFAULT_TITLE = 'Linux Omnibus — Sıfırdan DevOps & Güvenliğe';
+    const DEFAULT_DESC = 'Türkçe Linux müfredatı: terminal, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, hardening, Kali ve kriz runbook’ları.';
+    const CANONICAL_ORIGIN = 'https://burakkutlu27.github.io/LinuxOmnibus';
 
     function storageGet(key) {
         try {
@@ -186,12 +190,15 @@
         const all = allLessonIds();
         const read = getRead();
         const n = all.filter(id => read.has(id)).length;
+        const pct = all.length ? Math.round((n / all.length) * 100) : 0;
         const fill = $('#progress-fill');
         const label = $('#progress-label');
         const total = $('#progress-total');
-        if (fill) fill.style.width = (all.length ? (n / all.length) * 100 : 0) + '%';
+        if (fill) fill.style.width = pct + '%';
         if (label) label.textContent = n;
         if (total) total.textContent = all.length;
+        const bar = $('#progress-bar');
+        if (bar) bar.setAttribute('aria-valuenow', String(pct));
         const trackLabel = $('#track-label');
         if (trackLabel) {
             const t = currentTrack();
@@ -335,19 +342,122 @@
         });
     }
 
+    function siteBaseUrl() {
+        try {
+            const u = new URL(location.href);
+            if (/github\.io$/i.test(u.hostname) || /linuxomnibus/i.test(u.pathname)) {
+                let path = u.pathname.replace(/\/index\.html$/i, '/');
+                if (!path.endsWith('/')) {
+                    const i = path.lastIndexOf('/');
+                    path = i >= 0 ? path.slice(0, i + 1) : '/';
+                }
+                return u.origin + path;
+            }
+            // Lokal / file: production canonical kullan (OG/paylaşım tutarlılığı)
+            if (u.protocol === 'http:' || u.protocol === 'https:') {
+                let path = u.pathname.replace(/\/index\.html$/i, '/');
+                if (!path.endsWith('/')) {
+                    const i = path.lastIndexOf('/');
+                    path = i >= 0 ? path.slice(0, i + 1) : '/';
+                }
+                return u.origin + path;
+            }
+        } catch { /* ignore */ }
+        return CANONICAL_ORIGIN + '/';
+    }
+
+    function plainText(html) {
+        const d = document.createElement('div');
+        d.innerHTML = html || '';
+        return (d.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function setMetaContent(selector, value, attr) {
+        const el = document.querySelector(selector);
+        if (el) el.setAttribute(attr || 'content', value);
+    }
+
+    function updateDocumentMeta(pageTitle, description) {
+        const fullTitle = pageTitle ? `${pageTitle} — Linux Omnibus` : DEFAULT_TITLE;
+        const desc = (description && description.slice(0, 160)) || DEFAULT_DESC;
+        document.title = fullTitle;
+        setMetaContent('meta[name="description"]', desc);
+        setMetaContent('meta[property="og:title"]', fullTitle);
+        setMetaContent('meta[property="og:description"]', desc);
+        setMetaContent('meta[name="twitter:title"]', fullTitle);
+        setMetaContent('meta[name="twitter:description"]', desc);
+
+        const params = new URLSearchParams(location.search);
+        const p = params.get('p');
+        const level = params.get('level');
+        const base = siteBaseUrl();
+        let canonical = base;
+        if (p) {
+            canonical = `${base}?p=${encodeURIComponent(p)}`;
+            if (level && level !== 'baslangic') canonical += `&level=${encodeURIComponent(level)}`;
+        }
+        setMetaContent('link[rel="canonical"]', canonical, 'href');
+        setMetaContent('meta[property="og:url"]', canonical);
+    }
+
+    function injectCourseSyllabus() {
+        if (!window.BIBLE || !window.BIBLE.length) return;
+        if (document.getElementById('omnibus-syllabus-ld')) return;
+        const base = CANONICAL_ORIGIN + '/';
+        const data = {
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: 'Linux Omnibus müfredat bölümleri',
+            numberOfItems: window.BIBLE.length,
+            itemListElement: window.BIBLE.map((ch, i) => ({
+                '@type': 'ListItem',
+                position: i + 1,
+                item: {
+                    '@type': 'Course',
+                    name: `${ch.num}. ${ch.title}`,
+                    description: plainText(ch.intro || '').slice(0, 200),
+                    url: `${base}?p=${encodeURIComponent(ch.id)}`,
+                    isAccessibleForFree: true,
+                    inLanguage: 'tr'
+                }
+            }))
+        };
+        const s = document.createElement('script');
+        s.type = 'application/ld+json';
+        s.id = 'omnibus-syllabus-ld';
+        s.textContent = JSON.stringify(data);
+        document.head.appendChild(s);
+    }
+
+    /** Query (?p=) birincil; hash eski yer imleri için korunur */
     function setHash(id, level) {
-        const special = ['encyclopedia', 'kali', 'roadmap', 'tracks', 'interview'];
+        const url = new URL(location.href);
+        url.searchParams.set('p', id);
+        if (level && level !== 'baslangic' && !SPECIAL_ROUTES.includes(id)) {
+            url.searchParams.set('level', level);
+        } else {
+            url.searchParams.delete('level');
+        }
         const parts = [id];
-        if (level && level !== 'baslangic' && !special.includes(id)) parts.push(level);
-        const next = '#' + parts.join('/');
-        if (location.hash !== next) history.replaceState(null, '', next);
+        if (level && level !== 'baslangic' && !SPECIAL_ROUTES.includes(id)) parts.push(level);
+        url.hash = parts.join('/');
+        const next = url.pathname + url.search + url.hash;
+        const cur = location.pathname + location.search + location.hash;
+        if (cur !== next) history.replaceState(null, '', next);
     }
 
     function parseHash() {
-        const raw = (location.hash || '').replace(/^#/, '').trim();
-        if (!raw) return null;
-        const [id, level] = raw.split('/');
-        return { id, level };
+        const params = new URLSearchParams(location.search);
+        let id = params.get('p');
+        let level = params.get('level') || undefined;
+        if (!id) {
+            const raw = (location.hash || '').replace(/^#/, '').trim();
+            if (!raw) return null;
+            const parts = raw.split('/');
+            id = parts[0];
+            level = parts[1];
+        }
+        return id ? { id, level } : null;
     }
 
     function navTo(id, opts) {
@@ -360,27 +470,47 @@
             state.kaliCat = 'all';
         }
         $all('.nav-btn').forEach(b => b.classList.toggle('nav-item-active', b.dataset.nav === id));
+
+        let metaTitle = null;
+        let metaDesc = null;
+
         if (id === 'encyclopedia') {
             $('#current-section-title').textContent = 'Komut Ansiklopedisi';
+            metaTitle = 'Komut Ansiklopedisi';
+            metaDesc = 'Linux komut ansiklopedisi: gezinme, dosya, süreç, ağ, Docker, Kubernetes ve ops araçları.';
             renderEncyclopedia(opts.query);
         } else if (id === 'kali') {
             $('#current-section-title').textContent = 'Kali Arsenal';
+            metaTitle = 'Kali Arsenal';
+            metaDesc = 'Kali Linux araç kataloğu ve derin eğitim: Nmap, Burp, Metasploit, Wireshark ve daha fazlası.';
             renderKaliArsenal(opts.query);
         } else if (id === 'roadmap') {
             $('#current-section-title').textContent = 'Tüm Müfredat';
+            metaTitle = 'Tüm Müfredat';
+            metaDesc = '35 bölümlük Linux Omnibus yol haritası: sıfırdan DevOps, hardening ve güvenliğe.';
             renderRoadmap();
         } else if (id === 'tracks') {
             $('#current-section-title').textContent = 'Hedef Yollar';
+            metaTitle = 'Hedef Yollar';
+            metaDesc = 'DevOps, SRE, SOC, Red Team, Cloud Ops ve diğer kariyer yollarına göre filtrelenmiş Linux müfredatı.';
             renderTracks();
         } else if (id === 'interview') {
             $('#current-section-title').textContent = 'Mülakat Antrenmanı';
+            metaTitle = 'Mülakat Antrenmanı';
+            metaDesc = 'Linux, DevOps ve güvenlik mülakat soruları — track ve seviyeye göre antrenman.';
             renderInterview();
         } else {
             const ch = window.BIBLE.find(c => c.id === id);
-            if (ch) $('#current-section-title').textContent = `${ch.num}. ${ch.title}`;
+            if (ch) {
+                $('#current-section-title').textContent = `${ch.num}. ${ch.title}`;
+                metaTitle = `${ch.num}. ${ch.title}`;
+                metaDesc = plainText(ch.intro || '') || `${ch.title} — Linux Omnibus dersi.`;
+            }
             renderChapter();
         }
+
         if (!opts.skipHash) setHash(id, state.level);
+        updateDocumentMeta(metaTitle, metaDesc);
         if (!opts.skipScroll) $('main')?.scrollTo({ top: 0, behavior: opts.instant ? 'auto' : 'smooth' });
         closeMobile();
     }
@@ -545,6 +675,7 @@
                     <code id="lab-cmd" class="text-term-green block">chmod 0755 script.sh</code>
                 </div>
             </div>
+            <div class="table-scroll">
             <table class="w-full text-xs font-mono">
                 <thead><tr class="text-[var(--muted)] text-left"><th class="py-2">Bit</th><th>User</th><th>Group</th><th>Other</th><th>Özel</th></tr></thead>
                 <tbody>
@@ -559,6 +690,7 @@
                         <td><label class="flex gap-1 items-center"><input type="checkbox" data-p="sticky"> Sticky</label></td></tr>
                 </tbody>
             </table>
+            </div>
         </div>`;
     }
 
@@ -2013,9 +2145,11 @@
         if (!lessonHits.length && !cmdHits.length && !kaliHits.length) {
             box.innerHTML = `<p class="text-center text-[var(--muted)] py-16">“${escapeHtml(q)}” için sonuç yok.</p>`;
             $('#current-section-title').textContent = 'Arama';
+            updateDocumentMeta('Arama', `“${q}” için Linux Omnibus arama sonucu.`);
             return;
         }
         $('#current-section-title').textContent = `Arama: ${q}`;
+        updateDocumentMeta(`Arama: ${q}`, `Linux Omnibus’ta “${q}” araması — ders, komut ve Kali sonuçları.`);
         $all('.nav-btn').forEach(b => b.classList.remove('nav-item-active'));
 
         let html = `<header class="mb-6"><h2 class="text-xl font-semibold">Arama sonuçları</h2>
@@ -2105,12 +2239,12 @@
     function applyRouteFromHash() {
         const parsed = parseHash();
         if (!parsed || !parsed.id) {
-            navTo('tracks', { skipHash: false, instant: true });
+            navTo('tracks', { instant: true });
             return;
         }
         const { id, level } = parsed;
-        if (id === 'encyclopedia' || id === 'kali' || id === 'roadmap' || id === 'tracks' || id === 'interview') {
-            navTo(id, { skipHash: true, instant: true });
+        if (SPECIAL_ROUTES.includes(id)) {
+            navTo(id, { instant: true });
             return;
         }
         const ch = window.BIBLE.find(c => c.id === id);
@@ -2119,16 +2253,18 @@
             return;
         }
         const lv = (level && ch.levels[level]) ? level : 'baslangic';
-        navTo(id, { level: lv, keepLevel: true, skipHash: true, instant: true });
+        navTo(id, { level: lv, keepLevel: true, instant: true });
     }
 
     function openMobile() {
         $('#sidebar')?.classList.add('open');
         $('#sidebar-overlay')?.classList.add('show');
+        $('#open-sidebar')?.setAttribute('aria-expanded', 'true');
     }
     function closeMobile() {
         $('#sidebar')?.classList.remove('open');
         $('#sidebar-overlay')?.classList.remove('show');
+        $('#open-sidebar')?.setAttribute('aria-expanded', 'false');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -2138,6 +2274,7 @@
         }
         state.cmdCat = 'Tümü';
         state.trackId = getTrackId();
+        injectCourseSyllabus();
         renderSidebar();
         updateProgress();
         setupTheme();
@@ -2148,6 +2285,7 @@
         $('#open-sidebar')?.addEventListener('click', openMobile);
         $('#sidebar-overlay')?.addEventListener('click', closeMobile);
         window.addEventListener('hashchange', () => applyRouteFromHash());
+        window.addEventListener('popstate', () => applyRouteFromHash());
         document.addEventListener('keydown', e => {
             if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
                 const tag = (e.target && e.target.tagName) || '';

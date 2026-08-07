@@ -1,88 +1,137 @@
 # Linux Omnibus
 
-Tek sayfalık, tarayıcıda çalışan Türkçe Linux müfredatı. Sunucu yok, build yok — `index.html` açıyorsun, okuyorsun.
+Türkçe, tarayıcıda çalışan, **sıfırdan job-ready’ye** Linux müfredatı.  
+Sunucu yok, `npm install` yok, build yok — statik dosyaları açıyorsun, okuyorsun.
 
-Sıfırdan terminal kullanımından Docker/Kubernetes, hardening, SOC ve yetkili lab’de Kali araçlarına kadar uzanan bir yol haritası. Her bölüm başlangıç / orta / ileri katmanlarına ayrılmış; mülakat soruları ve kriz senaryoları derslerin içine gömülü.
+[![Canlı demo](https://img.shields.io/badge/demo-Vercel-22D3EE?style=flat-square)](#yayınlama-vercel)
+[![Lisans](https://img.shields.io/badge/license-MIT-34D399?style=flat-square)](LICENSE)
+[![Stack](https://img.shields.io/badge/stack-HTML%20%2B%20JS%20(no%20build)-0B0E14?style=flat-square)](#kullanılan-teknolojiler)
 
-## Çalıştırma
+<p align="center">
+  <img src="og-image.jpg" alt="Linux Omnibus — Sıfırdan DevOps ve Güvenlik" width="720">
+</p>
+
+**Canlı demo:** Vercel + kendi domain’in (subdomain bağlayınca buraya yazılacak).  
+Geçici: Vercel’in verdiği `*.vercel.app` URL’si.
+
+---
+
+## Ne işe yarar?
+
+Tek sayfada:
+
+| Modül | Ölçek (yaklaşık) |
+|--------|------------------|
+| Müfredat | **35 bölüm**, her biri başlangıç / orta / ileri |
+| Hedef yollar | **9 kariyer track**’i (DevOps, SRE, SOC, Red/Blue Team, Cloud Ops…) |
+| Komut ansiklopedisi | **~570 komut** (TR karşılık + örnek) |
+| Kali Arsenal | Katalog + **16 derin araç** modülü |
+| Mülakat | **~50+ soru**, track/seviye filtresi |
+| Quiz & ilerleme | Ders sonu mini-quiz, okundu işaretleri, JSON dışa/içe aktar |
+| Widget’lar | chmod, cron, FHS, CIDR, `docker run` builder |
+
+Amaç: komut ezberi değil; “bu sistem neden böyle davrandı?” diye sorabilen bir ops / güvenlik temeli.
+
+> Güvenlik ve Kali içerikleri yalnızca kendi laboratuvarın veya yazılı izinli ortamlar içindir.
+
+---
+
+## Kurulum (lokal)
+
+**Gereksinim:** modern bir tarayıcı. Node/Python yalnızca isteğe bağlı lokal sunucu için.
 
 ```bash
-# seçenek 1 — dosyayı doğrudan aç
-# index.html’e çift tıkla
+git clone https://github.com/burakkutlu27/LinuxOmnibus.git
+cd LinuxOmnibus
 
-# seçenek 2 — lokal sunucu (önerilen)
-npx serve .
+# önerilen — PWA / service worker için HTTP gerekir
+npx --yes serve .
 # veya: python -m http.server 8080
 ```
 
-Ardından `http://localhost:3000` (veya seçtiğin port) → `index.html`.
+Tarayıcıda `http://localhost:3000` (veya seçtiğin port).
 
-İlk yüklemede CDN gerekir (Tailwind, Font Awesome, Google Fonts). Service worker bunları ve yerel JS’i önbelleğe alır; sonra çoğu içerik offline okunabilir. `file://` ile açınca PWA çalışmaz — lokal sunucu kullan.
+`file://` ile de açılır; PWA/offline cache çalışmaz. İlk yüklemede CDN (Tailwind, Font Awesome, Google Fonts) gerekir; service worker sonrası app shell offline okunabilir.
 
-## İçinde ne var?
+---
 
-### Müfredat — 35 bölüm
+## Yayınlama (Vercel)
 
-| # | Konu |
-|---|------|
-| 00–02 | Linux nedir, terminal, dosya/metin araçları |
-| 03–04 | süreçler, paketler, systemd, izin modeli |
-| 05–08 | yedekleme, editörler, PATH/derleme, FHS + log |
-| 09–11 | Kali girişi, ağ temelleri, kriz runbook’u |
-| 12–14 | SSH, bash scripting, disk/LVM |
-| 15–18 | Docker, Kubernetes, CI/CD, Ansible/Terraform |
-| 19–22 | gözlemlenebilirlik, hardening, TLS/secret, GitOps/Day-2 |
-| 23–26 | Git, bulut Linux, Python ops, DB operasyonu |
-| 27–29 | ileri ağ/LB, systemd derinliği, performans |
-| 30–34 | SELinux/AppArmor, LDAP/AD/SSO, IR, eBPF, konteyner güvenliği |
+Bu repo **build’siz statik** site. Ortam değişkeni **yok** (`vercel.json` yalnızca headers / static publish).
 
-### Hedef yollar (9 track)
+### 1) Projeyi bağla
 
-Rolüne göre filtrelenmiş fazlar: Sıfırdan Linux, DevOps, SRE/Platform, Red Hat/Sysadmin, SOC, Red Team/Pentest, Blue Team/Hardening, Cloud Ops, Backend/Full-stack Ops.
+1. [Vercel](https://vercel.com) → **Add New… → Project** → bu GitHub repo’yu import et  
+2. Framework Preset: **Other**  
+3. Build Command: *boş bırak*  
+4. Output Directory: `.` (veya boş — kök `index.html`)  
+5. Install Command: *boş*  
+6. Deploy
 
-### Komut ansiklopedisi
+Config: [`vercel.json`](vercel.json)
 
-~570 komut: İngilizce köken, Türkçe karşılık, örnek, kısa tip. Gezinme, dosya, metin, yetki, süreç, ağ, paket, systemd, disk, Docker/K8s ve ops araçları.
+### 2) Domain bağla (portföy sitenle aynı aile)
 
-### Kali Arsenal + derin dalışlar
+Diğer projelerin gibi bir subdomain önerisi:
 
-Kategori bazlı araç envanteri (recon → exploit → forensics…) ve 16 araç için ayrı derin modül: Nmap, Burp, Metasploit, SQLmap, Hydra, Hashcat/John, Wireshark, Aircrack-ng, Responder, NetExec, Nikto/WPScan, Bettercap, Nuclei, BloodHound, Impacket, LinPEAS/WinPEAS.
+| Örnek | Ne zaman |
+|--------|----------|
+| `linux.senin-domain.com` | Kısa, marka odaklı |
+| `omnibus.senin-domain.com` | Proje adıyla birebir |
+| `learn.senin-domain.com/…` | Path altında (ayrı Vercel project + rewrite gerekir — şimdilik önermiyorum) |
 
-### Mülakat bankası
+Vercel Project → **Settings → Domains** → subdomain ekle → DNS’te CNAME → `cname.vercel-dns.com` (veya Vercel’in gösterdiği kayıt).
 
-~50 ekstra soru; track ve seviyeye göre süzülüyor. Ders içi interview bloklarıyla birlikte çalışıyor. “Biliyorum” işaretleri localStorage’da kalıyor.
+Ana sitenizden link: `https://senin-domain.com` portföyünde “Linux Omnibus” → bu subdomain.
 
-### Diğer
+### 3) SEO URL’lerini güncelle
 
-- Global arama (`/` kısayolu)
-- Okuma ilerlemesi (ders bazlı)
-- Ders sonu **mini-quiz** (seçmeli sorular, skor localStorage’da; tam doğru → okundu)
-- İnteraktif widget’lar: chmod, cron, FHS, **CIDR**, **docker run** builder
-- İlerleme **dışa / içe aktar** (JSON: okunan dersler, tema, yol, mülakat “biliyorum”, quiz skorları)
-- Açık/koyu tema
-- Hash route ile yer imi (`#ch15/orta` gibi)
-- **PWA / offline**: `manifest.webmanifest` + service worker — ilk ziyaretten sonra app shell ve CDN varlıkları önbelleğe alınır (HTTPS veya localhost gerekir)
+`robots.txt`, `sitemap.xml`, `index.html` (canonical/OG) ve `app.js` içindeki kanonik origin şu an geçici olarak `github.io` değerinde.  
+**Canlı subdomain’i yazdığında** hepsini o URL’ye çekeriz (tek seferlik).
 
-## Dosya haritası
+---
+
+## Kullanılan teknolojiler
+
+| Katman | Seçim |
+|--------|--------|
+| UI | HTML + Tailwind CDN + özel CSS değişkenleri (açık/koyu) |
+| Mantık | Vanilla JS (`app.js`), içerik düz JS dizileri |
+| İkon / font | Font Awesome 6, IBM Plex, Source Serif 4 |
+| Offline | `manifest.webmanifest` + service worker (`sw.js`) |
+| SEO | `robots.txt`, `sitemap.xml`, OG/Twitter, JSON-LD, `?p=` route |
+| Hosting hedefi | Vercel (+ özel domain) |
+
+**Bağımlılık dosyası yok** (`package.json` yok) — bilinçli tercih.
+
+---
+
+## Öne çıkan teknik kararlar
+
+1. **No-build SPA** — Müfredat `window.BIBLE` vb. veri yapılarında; yeni ders = objeye alan eklemek. Öğrenme içeriği toolchain’e kilitlenmesin diye.
+2. **`?p=` birincil route, hash yedek** — Eski `#ch15/orta` yer imleri çalışır; sitemap ve canonical indeks için query kullanır.
+3. **İstemci tarafı ilerleme** — `localStorage` + JSON export/import; hesap/backend yok.
+4. **PWA cache** — App shell + içerik JS + CDN varlıkları; lab / uçak modu okuma.
+5. **CDN Tailwind** — Trade-off: sıfır build maliyeti vs. production CSS bundle. Proje karakteri “aç ve oku”; bundler bilerek eklenmedi.
+6. **İçerik = kod** — CMS yok; PR ile müfredat review edilebilir.
+
+---
+
+## Repo haritası
 
 ```
-index.html              # kabuk + stiller
-app.js                  # routing, sidebar, arama, render
-content.js              # bölüm 00–11
-content-more.js         # bölüm 12–34
-tracks.js               # kariyer yolları
-encyclopedia*.js        # komut ansiklopedisi
-kali-arsenal.js         # araç kategorileri
-kali-deep.js            # araç derin modülleri
-interview.js            # mülakat soruları
-manifest.webmanifest    # PWA manifest
-sw.js                   # offline cache
-LICENSE                 # MIT
+index.html                 # kabuk, SEO meta, stiller
+app.js                     # routing, arama, render, PWA kaydı
+content.js / content-more.js
+tracks.js / interview.js
+encyclopedia*.js
+kali-arsenal.js / kali-deep.js
+manifest.webmanifest / sw.js
+robots.txt / sitemap.xml / og-image.jpg
+vercel.json                # Vercel static publish + headers
 ```
 
-İçerik düz JS dizilerinde (`window.BIBLE`, `window.COMMANDS`, …). Yeni bölüm eklemek = ilgili dosyaya obje push etmek.
-
-Ders sonu quiz eklemek için lesson objesine:
+Ders sonu quiz örneği:
 
 ```js
 quiz: [
@@ -90,12 +139,10 @@ quiz: [
 ]
 ```
 
-`answer` doğru şıkkın 0-tabanlı indeksidir. Widget için `widget: 'chmod' | 'cron' | 'fhs' | 'cidr' | 'docker'`.
+`answer` 0-tabanlı indeks. Widget: `widget: 'chmod' | 'cron' | 'fhs' | 'cidr' | 'docker'`.
 
-## Etik not
-
-Güvenlik ve Kali içerikleri yalnızca kendi laboratuvarın veya yazılı izinli ortamlar içindir. İzinsiz tarama / sızma testi suçtur; müfredat da bunu açıkça söylüyor.
+---
 
 ## Lisans
 
-[MIT](LICENSE) — yazılım ve müfredat dosyaları bu lisans altındadır.
+[MIT](LICENSE) — yazılım ve müfredat dosyaları.
