@@ -15,12 +15,7 @@
     }
   ],
   "rewrites": [
-    { "source": "/tracks", "destination": "/index.html" },
-    { "source": "/roadmap", "destination": "/index.html" },
-    { "source": "/encyclopedia", "destination": "/index.html" },
-    { "source": "/kali", "destination": "/index.html" },
-    { "source": "/interview", "destination": "/index.html" },
-    { "source": "/ch:num(\\d+)", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/index" }
   ],
   "headers": [
     {

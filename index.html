@@ -9,6 +9,19 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Linux Omnibus">
     <meta name="theme-color" content="#0B0E14">
+    <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('linux-omnibus-theme') || localStorage.getItem('linux-bible-theme');
+        var light = t ? t === 'light' : window.matchMedia('(prefers-color-scheme: light)').matches;
+        var root = document.documentElement;
+        root.classList.toggle('light', light);
+        root.classList.toggle('dark', !light);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.content = light ? '#F7F5F0' : '#0B0E14';
+      } catch (e) { /* private mode */ }
+    })();
+    </script>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Linux Omnibus">

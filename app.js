@@ -2324,6 +2324,8 @@
         const root = document.documentElement;
         root.classList.toggle('light', light);
         root.classList.toggle('dark', !light);
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.content = light ? '#F7F5F0' : '#0B0E14';
         const icon = $('#theme-icon');
         if (icon) {
             icon.innerHTML = light
