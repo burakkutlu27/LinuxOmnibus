@@ -10,11 +10,20 @@ Linux Omnibus; terminal, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, h
 
 ## Ana sayfalar
 
-- Hedef yollar (DevOps, SRE, SOC, Red Team): https://linuxomnibus.burakkutlu.com/?p=tracks
-- Tüm müfredat haritası: https://linuxomnibus.burakkutlu.com/?p=roadmap
-- Komut ansiklopedisi: https://linuxomnibus.burakkutlu.com/?p=encyclopedia
-- Kali Arsenal: https://linuxomnibus.burakkutlu.com/?p=kali
-- Mülakat antrenmanı: https://linuxomnibus.burakkutlu.com/?p=interview
+- Hedef yollar (DevOps, SRE, SOC, Red Team): https://linuxomnibus.burakkutlu.com/tracks
+- Tüm müfredat haritası: https://linuxomnibus.burakkutlu.com/roadmap
+- Komut ansiklopedisi: https://linuxomnibus.burakkutlu.com/encyclopedia
+- Kali Arsenal: https://linuxomnibus.burakkutlu.com/kali
+- Mülakat antrenmanı: https://linuxomnibus.burakkutlu.com/interview
+
+## Kariyer yolları (özet)
+
+- Sıfırdan Linux: terminal, dosya, süreç, temel teşhis
+- DevOps: Git, CI/CD, Docker, Kubernetes, IaC
+- SRE / Platform: SLO, on-call, gözlem, GitOps
+- Red Hat / Sysadmin: LVM, systemd, SELinux, Ansible
+- SOC: log, IR, hardening, host savunması
+- Red Team: Kali araçları, lab, penetrasyon temelleri
 
 ## Konu anahtar kelimeleri
 

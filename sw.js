@@ -1,5 +1,5 @@
-/* Linux Omnibus — offline cache (app shell + içerik + CDN varlıkları) */
-const CACHE = 'linux-omnibus-v4';
+/* Linux Omnibus — offline cache (app shell + içerik) */
+const CACHE = 'linux-omnibus-v5';
 const APP_SHELL = [
   './index.html',
   './styles.css',
@@ -20,7 +20,9 @@ const APP_SHELL = [
   './robots.txt',
   './sitemap.xml',
   './llms.txt',
-  './analytics.js'
+  './analytics.js',
+  './ga-config.js',
+  './google111952b10df35361.html'
 ];
 
 self.addEventListener('install', (event) => {
@@ -62,5 +64,5 @@ self.addEventListener('fetch', (event) => {
 });
 
 function isCdn(url) {
-  return /cdn\.tailwindcss\.com|cdnjs\.cloudflare\.com|fonts\.googleapis\.com|fonts\.gstatic\.com/.test(url);
+  return /fonts\.googleapis\.com|fonts\.gstatic\.com/.test(url);
 }

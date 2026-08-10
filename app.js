@@ -13,9 +13,10 @@
         [INTERVIEW_KNOWN_KEY]: 'linux-bible-interview-known'
     };
     const SPECIAL_ROUTES = ['encyclopedia', 'kali', 'roadmap', 'tracks', 'interview'];
-    const DEFAULT_TITLE = 'Linux Omnibus | Türkçe Linux, DevOps ve Siber Güvenlik Eğitimi';
+    const DEFAULT_TITLE = 'Linux Omnibus - Linux|DevOps|Siber Güvenlik Eğitimi';
     const DEFAULT_DESC = 'Ücretsiz Türkçe Linux müfredatı: terminalden Docker, Kubernetes, CI/CD, Ansible ve hardening’e. DevOps, SRE ve güvenlik kariyerine job-ready hazırlık — 35 bölüm, quiz ve mülakat.';
     const CANONICAL_ORIGIN = 'https://linuxomnibus.burakkutlu.com';
+    const ROUTE_RE = /^(tracks|roadmap|encyclopedia|kali|interview|ch\d+)$/i;
     const LAZY_SCRIPTS = {
         encyclopedia: ['encyclopedia.js', 'encyclopedia-more.js', 'encyclopedia-devops.js'],
         kali: ['kali-arsenal.js', 'kali-deep.js'],
@@ -23,23 +24,23 @@
     };
     const PAGE_SEO = {
         tracks: {
-            title: 'Hedef Yollar: DevOps, SRE ve Linux Kariyer Müfredatı | Omnibus',
+            title: 'Hedef Yollar: DevOps, SRE, Linux Müfredatı | Omnibus',
             description: 'DevOps, SRE, SOC ve Red Team için Türkçe Linux hedef yolları: haftalık ders planı, kimler için, bölüm sayısı, mülakat hazırlığı. 9 kariyer yolunda job-ready müfredat.'
         },
         roadmap: {
-            title: 'Tüm Müfredat — 35 Bölümlük Linux DevOps Yol Haritası | Omnibus',
+            title: 'Tüm Müfredat — 35 Bölüm Linux Yol Haritası | Omnibus',
             description: 'Sıfırdan terminalden Docker, Kubernetes, CI/CD, Ansible, hardening ve Kali’ye: 35 bölümlük Türkçe Linux müfredat haritası, ders ilerlemesi ve bölüm bazlı okundu takibi.'
         },
         encyclopedia: {
-            title: 'Komut Ansiklopedisi — Linux ve DevOps Komutları | Omnibus',
+            title: 'Komut Ansiklopedisi — Linux DevOps | Omnibus',
             description: 'Türkçe Linux komut ansiklopedisi: terminal, dosya, süreç, ağ, Docker, Kubernetes ve Ansible araçları. ~570 komut, örnek kullanım, TR karşılık ve kısa ipuçları.'
         },
         kali: {
-            title: 'Kali Arsenal — Penetrasyon Test ve Güvenlik Araçları | Omnibus',
+            title: 'Kali Arsenal — Penetrasyon Test Araçları | Omnibus',
             description: 'Kali Linux araç kataloğu ve derin eğitim: Nmap, Burp Suite, Metasploit, Wireshark, SQLmap ve resmi kali-tools metapaketleri. Lab ortamı için Türkçe rehber.'
         },
         interview: {
-            title: 'Mülakat Antrenmanı — Linux DevOps ve Güvenlik Soruları | Omnibus',
+            title: 'Mülakat — Linux DevOps Güvenlik Soruları | Omnibus',
             description: 'Linux, DevOps, Docker, Kubernetes ve siber güvenlik mülakat soruları. Kariyer yoluna göre filtre, seviye seçimi ve Türkçe antrenman modu ile mülakat hazırlığı.'
         }
     };
@@ -215,15 +216,16 @@
 
     function loadScript(src) {
         return new Promise((resolve, reject) => {
-            if (document.querySelector(`script[src="${src}"]`)) {
+            const abs = src.startsWith('/') || src.startsWith('http') ? src : (appMountPath().replace(/\/?$/, '/') + src);
+            if (document.querySelector(`script[src="${abs}"]`) || document.querySelector(`script[src="${src}"]`)) {
                 resolve();
                 return;
             }
             const el = document.createElement('script');
-            el.src = src;
+            el.src = abs;
             el.defer = true;
             el.onload = () => resolve();
-            el.onerror = () => reject(new Error('Script yüklenemedi: ' + src));
+            el.onerror = () => reject(new Error('Script yüklenemedi: ' + abs));
             document.body.appendChild(el);
         });
     }
@@ -399,28 +401,39 @@
         });
     }
 
+    /** Uygulama kök yolu (/ veya /repo/); bilinen rota segmenti çıkarılır */
+    function appMountPath() {
+        try {
+            const u = new URL(location.href);
+            if (u.protocol !== 'http:' && u.protocol !== 'https:') return '/';
+            let path = u.pathname.replace(/\/index\.html$/i, '/');
+            path = path.replace(/\/(tracks|roadmap|encyclopedia|kali|interview|ch\d+)\/?$/i, '/');
+            if (!path.endsWith('/')) {
+                const i = path.lastIndexOf('/');
+                path = i >= 0 ? path.slice(0, i + 1) : '/';
+            }
+            return path || '/';
+        } catch { /* ignore */ }
+        return '/';
+    }
+
     function siteBaseUrl() {
         try {
             const u = new URL(location.href);
-            if (/github\.io$/i.test(u.hostname) || /linuxomnibus/i.test(u.pathname)) {
-                let path = u.pathname.replace(/\/index\.html$/i, '/');
-                if (!path.endsWith('/')) {
-                    const i = path.lastIndexOf('/');
-                    path = i >= 0 ? path.slice(0, i + 1) : '/';
-                }
-                return u.origin + path;
-            }
-            // Lokal / file: production canonical kullan (OG/paylaşım tutarlılığı)
             if (u.protocol === 'http:' || u.protocol === 'https:') {
-                let path = u.pathname.replace(/\/index\.html$/i, '/');
-                if (!path.endsWith('/')) {
-                    const i = path.lastIndexOf('/');
-                    path = i >= 0 ? path.slice(0, i + 1) : '/';
-                }
-                return u.origin + path;
+                return u.origin + appMountPath();
             }
         } catch { /* ignore */ }
         return CANONICAL_ORIGIN + '/';
+    }
+
+    function hrefFor(id, level) {
+        const mount = appMountPath();
+        let path = mount + encodeURIComponent(id);
+        if (level && level !== 'baslangic' && !SPECIAL_ROUTES.includes(id)) {
+            path += '?level=' + encodeURIComponent(level);
+        }
+        return path;
     }
 
     function plainText(html) {
@@ -453,14 +466,13 @@
         setMetaContent('meta[name="twitter:title"]', fullTitle);
         setMetaContent('meta[name="twitter:description"]', desc);
 
-        const params = new URLSearchParams(location.search);
-        const p = params.get('p');
-        const level = params.get('level');
         const base = siteBaseUrl();
-        let canonical = base;
-        if (p) {
-            canonical = `${base}?p=${encodeURIComponent(p)}`;
-            if (level && level !== 'baslangic') canonical += `&level=${encodeURIComponent(level)}`;
+        let canonical = base.replace(/\/?$/, '/');
+        if (pageId) {
+            canonical = base.replace(/\/?$/, '/') + pageId;
+            if (state.level && state.level !== 'baslangic' && !SPECIAL_ROUTES.includes(pageId)) {
+                canonical += '?level=' + encodeURIComponent(state.level);
+            }
         }
         setMetaContent('link[rel="canonical"]', canonical, 'href');
         setMetaContent('meta[property="og:url"]', canonical);
@@ -482,7 +494,7 @@
                     '@type': 'Course',
                     name: `${ch.num}. ${ch.title}`,
                     description: plainText(ch.intro || '').slice(0, 200),
-                    url: `${base}?p=${encodeURIComponent(ch.id)}`,
+                    url: `${base}${encodeURIComponent(ch.id)}`,
                     isAccessibleForFree: true,
                     inLanguage: 'tr'
                 }
@@ -495,33 +507,59 @@
         document.head.appendChild(s);
     }
 
-    /** Query (?p=) birincil; hash eski yer imleri için korunur */
+    /** Path birincil (/tracks); ?p= ve #hash eski yer imleri için okunur */
     function setHash(id, level) {
         const url = new URL(location.href);
-        url.searchParams.set('p', id);
+        if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+            url.searchParams.set('p', id);
+            if (level && level !== 'baslangic' && !SPECIAL_ROUTES.includes(id)) {
+                url.searchParams.set('level', level);
+            } else {
+                url.searchParams.delete('level');
+            }
+            const parts = [id];
+            if (level && level !== 'baslangic' && !SPECIAL_ROUTES.includes(id)) parts.push(level);
+            url.hash = parts.join('/');
+            const next = url.pathname + url.search + url.hash;
+            const cur = location.pathname + location.search + location.hash;
+            if (cur !== next) history.replaceState(null, '', next);
+            return;
+        }
+        const mount = appMountPath();
+        url.pathname = (mount.replace(/\/?$/, '/') + id).replace(/\/+/g, '/');
+        url.searchParams.delete('p');
         if (level && level !== 'baslangic' && !SPECIAL_ROUTES.includes(id)) {
             url.searchParams.set('level', level);
         } else {
             url.searchParams.delete('level');
         }
-        const parts = [id];
-        if (level && level !== 'baslangic' && !SPECIAL_ROUTES.includes(id)) parts.push(level);
-        url.hash = parts.join('/');
-        const next = url.pathname + url.search + url.hash;
-        const cur = location.pathname + location.search + location.hash;
+        url.hash = '';
+        const next = url.pathname + url.search;
+        const cur = location.pathname + location.search;
         if (cur !== next) history.replaceState(null, '', next);
     }
 
     function parseHash() {
         const params = new URLSearchParams(location.search);
-        let id = params.get('p');
+        let id = null;
         let level = params.get('level') || undefined;
+
+        const mount = appMountPath();
+        let path = location.pathname;
+        if (mount !== '/' && path.toLowerCase().startsWith(mount.toLowerCase())) {
+            path = path.slice(mount.length - 1);
+        }
+        const seg = path.replace(/^\/+|\/+$/g, '').split('/')[0] || '';
+        if (seg && ROUTE_RE.test(seg)) id = seg;
+
+        if (!id) id = params.get('p');
         if (!id) {
             const raw = (location.hash || '').replace(/^#/, '').trim();
-            if (!raw) return null;
-            const parts = raw.split('/');
-            id = parts[0];
-            level = parts[1];
+            if (raw) {
+                const parts = raw.split('/');
+                id = parts[0];
+                if (!level) level = parts[1];
+            }
         }
         return id ? { id, level } : null;
     }
@@ -566,6 +604,7 @@
 
         if (!opts.skipHash) setHash(id, state.level);
         updateDocumentMeta(id, metaChapter);
+        window.OmnibusAnalytics?.trackPage?.();
         if (!opts.skipScroll) $('main')?.scrollTo({ top: 0, behavior: opts.instant ? 'auto' : 'smooth' });
         closeMobile();
     }
@@ -598,7 +637,7 @@
             <div class="depth-card rounded-lg overflow-hidden mb-2">
                 <button type="button" class="acc-toggle w-full flex justify-between items-center p-3.5 text-left text-xs font-semibold">
                     <span>${q.q}</span>
-                    <i class="fa-solid fa-chevron-down text-[10px] text-[var(--muted)]"></i>
+                    <svg class="icon icon-sm icon-chevron text-[var(--muted)]" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.7 8.7a1 1 0 0 1 1.4 0L12 12.6l3.9-3.9a1 1 0 1 1 1.4 1.4l-4.6 4.6a1 1 0 0 1-1.4 0L6.7 10.1a1 1 0 0 1 0-1.4z"/></svg>
                 </button>
                 <div class="acc-body px-3.5 pb-3.5 text-xs text-[var(--muted)] border-t border-card-border leading-relaxed">${q.a}</div>
             </div>
@@ -854,7 +893,7 @@
                         <div class="depth-card rounded-lg overflow-hidden mb-2">
                             <button type="button" class="acc-toggle w-full flex justify-between items-center p-4 text-left text-sm font-semibold">
                                 <span>${q.q}</span>
-                                <i class="fa-solid fa-chevron-down text-xs text-[var(--muted)]"></i>
+                                <svg class="icon icon-sm icon-chevron text-[var(--muted)]" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.7 8.7a1 1 0 0 1 1.4 0L12 12.6l3.9-3.9a1 1 0 1 1 1.4 1.4l-4.6 4.6a1 1 0 0 1-1.4 0L6.7 10.1a1 1 0 0 1 0-1.4z"/></svg>
                             </button>
                             <div class="acc-body px-4 pb-4 text-xs text-[var(--muted)] border-t border-card-border leading-relaxed">${q.a}</div>
                         </div>
@@ -1333,7 +1372,7 @@
                 <div class="depth-card rounded-lg overflow-hidden mb-2">
                     <button type="button" class="acc-toggle w-full flex justify-between items-center p-3 text-left text-xs font-semibold">
                         <span>${escapeHtml(qa.q)}</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-[var(--muted)]"></i>
+                        <svg class="icon icon-sm icon-chevron text-[var(--muted)]" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.7 8.7a1 1 0 0 1 1.4 0L12 12.6l3.9-3.9a1 1 0 1 1 1.4 1.4l-4.6 4.6a1 1 0 0 1-1.4 0L6.7 10.1a1 1 0 0 1 0-1.4z"/></svg>
                     </button>
                     <div class="acc-body px-3 pb-3 text-xs text-[var(--muted)] border-t border-card-border leading-relaxed">${escapeHtml(qa.a)}</div>
                 </div>`).join('');
@@ -1839,7 +1878,7 @@
                             <span class="text-sm font-semibold text-[var(--text)]">${escapeHtml(item.q)}</span>
                             <span class="block text-[10px] text-[var(--muted)] mt-1 font-mono">${escapeHtml(item.from)}</span>
                         </span>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-[var(--muted)] mt-1 shrink-0"></i>
+                        <svg class="icon icon-sm icon-chevron text-[var(--muted)] mt-1 shrink-0" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.7 8.7a1 1 0 0 1 1.4 0L12 12.6l3.9-3.9a1 1 0 1 1 1.4 1.4l-4.6 4.6a1 1 0 0 1-1.4 0L6.7 10.1a1 1 0 0 1 0-1.4z"/></svg>
                     </button>
                     <div class="acc-body px-4 pb-4 text-xs text-[var(--muted)] border-t border-card-border leading-relaxed">
                         ${escapeHtml(item.a)}
@@ -2004,14 +2043,14 @@
                 <p>DevOps mühendisi, SRE, Red Hat sistem yöneticisi, SOC analisti, Red Team, Cloud Ops ve sıfırdan Linux yollarının her biri Docker, Kubernetes, hardening veya Kali modüllerini rolünüze göre filtreler. Yol kartındaki <strong>Mülakat</strong> düğmesi o track’e özel soru setine götürür.</p>
                 <h2 class="text-lg font-semibold text-[var(--text)] font-sans">İlgili Linux Omnibus bölümleri</h2>
                 <ul class="list-disc pl-5 space-y-1 text-[var(--muted)] font-sans text-xs">
-                    <li><a href="?p=roadmap" class="text-term-cyan underline underline-offset-2">Tüm müfredat</a> — 35 bölümlük tam Linux · DevOps · güvenlik haritası</li>
-                    <li><a href="?p=encyclopedia" class="text-term-cyan underline underline-offset-2">Komut ansiklopedisi</a> — ~570 komut, TR karşılık ve örnekler</li>
-                    <li><a href="?p=interview" class="text-term-cyan underline underline-offset-2">Mülakat antrenmanı</a> — Linux, DevOps ve güvenlik soruları</li>
-                    <li><a href="?p=kali" class="text-term-cyan underline underline-offset-2">Kali Arsenal</a> — penetrasyon test araç kataloğu</li>
-                    <li><a href="?p=ch0" class="text-term-cyan underline underline-offset-2">Linux nedir?</a> — müfredata giriş dersi</li>
+                    <li><a href="/roadmap" class="text-term-cyan underline underline-offset-2">Tüm müfredat</a> — 35 bölümlük tam Linux · DevOps · güvenlik haritası</li>
+                    <li><a href="/encyclopedia" class="text-term-cyan underline underline-offset-2">Komut ansiklopedisi</a> — ~570 komut, TR karşılık ve örnekler</li>
+                    <li><a href="/interview" class="text-term-cyan underline underline-offset-2">Mülakat antrenmanı</a> — Linux, DevOps ve güvenlik soruları</li>
+                    <li><a href="/kali" class="text-term-cyan underline underline-offset-2">Kali Arsenal</a> — penetrasyon test araç kataloğu</li>
+                    <li><a href="/ch0" class="text-term-cyan underline underline-offset-2">Linux nedir?</a> — müfredata giriş dersi</li>
                 </ul>
             </section>
-            <p class="text-xs text-[var(--muted)] mt-6">Tüm konuları serbest dolaşmak için <a href="?p=roadmap" class="underline text-term-cyan">Tüm Müfredat</a> haritasına bak veya <button type="button" id="goto-roadmap" class="underline text-term-cyan">haritayı aç</button>.</p>`;
+            <p class="text-xs text-[var(--muted)] mt-6">Tüm konuları serbest dolaşmak için <a href="/roadmap" class="underline text-term-cyan">Tüm Müfredat</a> haritasına bak veya <button type="button" id="goto-roadmap" class="underline text-term-cyan">haritayı aç</button>.</p>`;
         box.innerHTML = html;
 
         $all('[data-activate]').forEach(btn => {
@@ -2286,7 +2325,11 @@
         root.classList.toggle('light', light);
         root.classList.toggle('dark', !light);
         const icon = $('#theme-icon');
-        if (icon) icon.className = light ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        if (icon) {
+            icon.innerHTML = light
+                ? '<path d="M12 4a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1zm0 13a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zm8-5a1 1 0 0 1-1 1h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zM6 12a1 1 0 0 1-1 1H4a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1zm11.66-5.66a1 1 0 0 1 0 1.41l-.7.71a1 1 0 1 1-1.42-1.42l.71-.7a1 1 0 0 1 1.41 0zM8.46 15.54a1 1 0 0 1 0 1.41l-.7.71a1 1 0 1 1-1.42-1.42l.71-.7a1 1 0 0 1 1.41 0zm9.2 1.41a1 1 0 0 1-1.41 0l-.71-.7a1 1 0 1 1 1.42-1.42l.7.71a1 1 0 0 1 0 1.41zM8.46 8.46a1 1 0 0 1-1.41 0l-.71-.7A1 1 0 0 1 7.76 6.3l.7.71a1 1 0 0 1 0 1.41zM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/>'
+                : '<path d="M12.5 3a1 1 0 0 1 .9 1.45A7 7 0 1 0 19.55 12.6 1 1 0 0 1 21 11.5 9 9 0 1 1 12.5 3z"/>';
+        }
     }
 
     function setupTheme() {

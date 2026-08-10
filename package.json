@@ -1,0 +1,25 @@
+{
+  "name": "linuxbible",
+  "version": "1.0.0",
+  "description": "Ücretsiz Türkçe Linux müfredatı — sıfırdan DevOps, SRE ve siber güvenliğe. Terminal, Docker, Kubernetes, quiz ve mülakat.",
+  "scripts": {
+    "build:css": "tailwindcss -i ./css/input.css -o ./styles.utilities.css --minify && node scripts/concat-css.js",
+    "build": "npm run build:css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/burakkutlu27/LinuxOmnibus.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/burakkutlu27/LinuxOmnibus/issues"
+  },
+  "homepage": "https://github.com/burakkutlu27/LinuxOmnibus#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  },
+  "private": true
+}

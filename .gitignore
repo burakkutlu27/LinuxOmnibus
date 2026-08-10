@@ -2,3 +2,20 @@
 .DS_Store
 Thumbs.db
 *.log
+
+# Vercel CLI (lokal proje bağlantısı)
+.vercel/
+
+# Ortam / gizli dosyalar (ileride kullanılırsa)
+.env
+.env.*
+!.env.example
+
+# Editör / IDE
+.idea/
+*.swp
+*~
+
+# Lokal npm
+node_modules/
+styles.utilities.css

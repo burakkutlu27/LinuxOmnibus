@@ -1,10 +1,27 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "buildCommand": null,
+  "buildCommand": "npm run build:css",
   "outputDirectory": ".",
+  "installCommand": "npm install",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "query", "key": "p", "value": "(?<page>[^&]+)" }],
+      "destination": "/:page",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    { "source": "/tracks", "destination": "/index.html" },
+    { "source": "/roadmap", "destination": "/index.html" },
+    { "source": "/encyclopedia", "destination": "/index.html" },
+    { "source": "/kali", "destination": "/index.html" },
+    { "source": "/interview", "destination": "/index.html" },
+    { "source": "/ch:num(\\d+)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/sw.js",
@@ -14,7 +31,7 @@
       ]
     },
     {
-      "source": "/(manifest.webmanifest|robots.txt|sitemap.xml|llms.txt|styles.css|analytics.js)",
+      "source": "/(manifest.webmanifest|robots.txt|sitemap.xml|llms.txt|styles.css|analytics.js|ga-config.js|google*.html)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]

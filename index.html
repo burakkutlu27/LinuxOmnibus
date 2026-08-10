@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linux Omnibus | Türkçe Linux, DevOps ve Siber Güvenlik Eğitimi</title>
+    <title>Linux Omnibus | Türkçe Linux ve DevOps Eğitimi</title>
     <meta name="description" content="Ücretsiz Türkçe Linux müfredatı: terminalden Docker, Kubernetes, CI/CD, Ansible ve hardening’e. DevOps, SRE ve güvenlik kariyerine job-ready hazırlık — 35 bölüm, quiz ve mülakat.">
     <meta name="keywords" content="Linux eğitimi, Türkçe Linux, DevOps, SRE, siber güvenlik, Docker, Kubernetes, Ansible, CI/CD, sistem yönetimi, Kali Linux, hardening">
     <meta name="robots" content="index, follow, max-image-preview:large">
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://linuxomnibus.burakkutlu.com/">
     <meta property="og:site_name" content="Linux Omnibus">
     <meta property="og:locale" content="tr_TR">
-    <meta property="og:title" content="Linux Omnibus | Türkçe Linux, DevOps ve Siber Güvenlik Eğitimi">
+    <meta property="og:title" content="Linux Omnibus | Türkçe Linux ve DevOps Eğitimi">
     <meta property="og:description" content="Ücretsiz Türkçe Linux müfredatı: terminalden Docker, Kubernetes, CI/CD, Ansible ve hardening’e. DevOps, SRE ve güvenlik kariyerine job-ready hazırlık.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://linuxomnibus.burakkutlu.com/">
@@ -25,22 +25,16 @@
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Linux Omnibus — Türkçe Linux, DevOps ve Siber Güvenlik Eğitimi">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Linux Omnibus | Türkçe Linux, DevOps ve Siber Güvenlik Eğitimi">
+    <meta name="twitter:title" content="Linux Omnibus | Türkçe Linux ve DevOps Eğitimi">
     <meta name="twitter:description" content="Ücretsiz Türkçe Linux müfredatı: terminalden Docker, Kubernetes, CI/CD, Ansible ve hardening’e. DevOps, SRE ve güvenlik kariyerine job-ready hazırlık.">
     <meta name="twitter:image" content="https://linuxomnibus.burakkutlu.com/og-image.jpg">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐧%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preload" href="styles.css" as="style">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet"></noscript>
     <script type="application/ld+json">
@@ -96,36 +90,13 @@
       ]
     }
     </script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        'term-bg': 'var(--term-bg)',
-                        'card-dark': 'var(--card-bg)',
-                        'card-border': 'var(--card-border)',
-                        'term-green': '#34D399',
-                        'term-cyan': '#22D3EE',
-                        'term-amber': '#FBBF24',
-                        'term-red': '#F87171',
-                    },
-                    fontFamily: {
-                        sans: ['"IBM Plex Sans"', 'sans-serif'],
-                        mono: ['"IBM Plex Mono"', 'monospace'],
-                        serif: ['"Source Serif 4"', 'Georgia', 'serif'],
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="flex h-screen overflow-hidden text-sm">
 
 <aside id="sidebar" class="w-72 bg-[var(--sidebar-bg)] border-r border-card-border flex flex-col h-full z-30 shrink-0" aria-label="Ana menü">
     <div class="p-5 border-b border-card-border">
         <div class="site-brand text-base font-bold flex items-center gap-2">
-            <i class="fa-brands fa-linux text-term-cyan" aria-hidden="true"></i>
+            <svg class="icon icon-lg text-term-cyan" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 2c.4 1.3-.2 2.2-1 3.1-.9 1-1.6 2.1-1.5 3.4 1.2-.1 2.3-.7 3.1-1.5.9-.9 1.5-2.2 1.4-3.5.8.6 1.5 1.5 1.5 2.7 0 2.1-1.7 4.2-4.2 5.5C9.2 13 7 14.2 7 16.5c0 2.3 2.1 4 5 4s5-1.7 5-4c0-1.2-.5-2.2-1.3-3 .7-.2 1.4-.6 2-1.1C19.2 11 20 9.4 20 7.5 20 4.5 17.2 2 12.5 2zM9.2 19.2c-.8-.5-1.2-1.2-1.2-2.2 0-1.3 1.1-2.2 2.5-2.8-.2 2.1-1 3.8-1.3 5z"/></svg>
             LINUX <span class="text-term-cyan">OMNIBUS</span>
         </div>
         <p class="text-[10px] text-[var(--muted)] font-mono mt-1 tracking-wide uppercase">Sıfırdan · DevOps · Güvenlik · Job-ready</p>
@@ -139,7 +110,7 @@
             <button type="button" id="import-progress" class="flex-1 text-[10px] px-2 py-1.5 rounded border border-card-border text-[var(--muted)] hover:border-term-cyan hover:text-term-cyan" title="JSON’dan geri yükle">İçe aktar</button>
             <input type="file" id="import-progress-file" accept="application/json,.json" class="hidden">
         </div>
-        <p class="text-[10px] text-[var(--muted)] font-mono">Omnibus · / ara · ?p= · MIT</p>
+        <p class="text-[10px] text-[var(--muted)] font-mono">Omnibus · / ara · /tracks · MIT</p>
     </div>
 </aside>
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 md:hidden" aria-hidden="true"></div>
@@ -147,21 +118,23 @@
 <main class="flex-1 overflow-y-auto scroll-custom bg-term-bg relative flex flex-col min-w-0" id="main-content">
     <header class="sticky top-0 z-20 glass-panel px-4 sm:px-8 py-3 border-b border-card-border flex flex-wrap gap-3 justify-between items-center">
         <div class="flex items-center gap-3 min-w-0">
-            <button type="button" id="open-sidebar" class="md:hidden text-[var(--muted)]" aria-label="Menüyü aç" aria-controls="sidebar" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+            <button type="button" id="open-sidebar" class="md:hidden text-[var(--muted)]" aria-label="Menüyü aç" aria-controls="sidebar" aria-expanded="false">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16a1 1 0 1 0 0-2H4a1 1 0 1 0 0 2zm16 4H4a1 1 0 1 0 0 2h16a1 1 0 1 0 0-2zm0 6H4a1 1 0 1 0 0 2h16a1 1 0 1 0 0-2z"/></svg>
+            </button>
             <div class="min-w-0">
                 <span class="text-[10px] font-mono text-[var(--muted)]">OMNIBUS /</span>
-                <p id="current-section-title" class="text-sm sm:text-base font-semibold truncate">Giriş</p>
+                <p id="current-section-title" class="text-sm sm:text-base font-semibold truncate">Hedef Yollar</p>
             </div>
         </div>
         <div class="flex gap-2 items-center flex-1 sm:flex-none justify-end">
             <div class="relative flex-1 sm:flex-none max-w-md">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)] text-xs" aria-hidden="true"></i>
+                <svg class="icon icon-sm absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 4a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13zm0-2a8.5 8.5 0 1 0 5.3 15.1l4.1 4.1a1 1 0 0 0 1.4-1.4l-4.1-4.1A8.5 8.5 0 0 0 10.5 2z"/></svg>
                 <input type="search" id="globalSearch" placeholder="/ ile ara · docker, hardening…"
                        aria-label="Global arama"
                        class="bg-card-dark border border-card-border rounded-md pl-9 pr-3 py-2 text-xs w-full sm:w-80 outline-none focus:border-term-cyan text-[var(--text)] font-mono placeholder:text-[var(--muted)]">
             </div>
             <button type="button" id="theme-toggle" class="border border-card-border rounded-md text-xs text-[var(--muted)]" title="Tema" aria-label="Tema değiştir">
-                <i class="fa-solid fa-moon" id="theme-icon" aria-hidden="true"></i>
+                <svg id="theme-icon" class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 3a1 1 0 0 1 .9 1.45A7 7 0 1 0 19.55 12.6 1 1 0 0 1 21 11.5 9 9 0 1 1 12.5 3z"/></svg>
             </button>
         </div>
     </header>
@@ -172,16 +145,48 @@
             <h1 class="text-2xl font-semibold mt-3 text-[var(--text)]">Hedefe yönelik Linux ve DevOps müfredatı</h1>
             <p class="prose-book mt-3 text-base">DevOps mühendisi, SRE, sistem yöneticisi, SOC analisti veya Red Team hedefin için rolünü seç — sidebar o yola göre sıralanır, ilerleme çubuğu yalnızca bu yoldaki Linux derslerini sayar. Docker, Kubernetes, hardening ve Kali modülleri kariyer yoluna göre filtrelenir.</p>
         </header>
-        <p class="text-xs text-[var(--muted)]">Müfredat kartları yükleniyor…</p>
+
+        <section class="mb-8" aria-label="Kariyer yolları özeti">
+            <h2 class="text-lg font-semibold text-[var(--text)] mb-3">Dokuz kariyer yolu</h2>
+            <p class="prose-book text-base mb-4">Linux Omnibus ücretsiz Türkçe bir müfredattır: 35 bölüm, quiz, mülakat antrenmanı ve ~570 komutluk ansiklopedi. Aşağıdaki yollardan birini seçerek job-ready ilerleyebilirsiniz.</p>
+            <ul class="space-y-3 text-xs text-[var(--muted)] leading-relaxed">
+                <li><strong class="text-[var(--text)]">Sıfırdan Linux</strong> — Terminal, dosya, süreç ve temel teşhis (2–4 hafta).</li>
+                <li><strong class="text-[var(--text)]">DevOps Mühendisi</strong> — Git, CI/CD, Docker, Kubernetes ve IaC ile delivery hattı (8–12 hafta).</li>
+                <li><strong class="text-[var(--text)]">SRE / Platform</strong> — SLO, on-call, gözlem, GitOps ve Day-2 işletme (10–14 hafta).</li>
+                <li><strong class="text-[var(--text)]">Red Hat / Sistem Yöneticisi</strong> — LVM, systemd, SELinux, Ansible ile kurumsal Linux (8–12 hafta).</li>
+                <li><strong class="text-[var(--text)]">SOC Analisti</strong> — Log, IR, hardening ve host savunması (8–10 hafta).</li>
+                <li><strong class="text-[var(--text)]">Red Team</strong> — Kali araçları, lab ve penetrasyon temelleri.</li>
+                <li><strong class="text-[var(--text)]">Güvenlik / Hardening</strong> — TLS, SELinux, konteyner güvenliği.</li>
+                <li><strong class="text-[var(--text)]">Bulut</strong> — AWS/Azure/GCP üzerinde Linux operasyonu.</li>
+                <li><strong class="text-[var(--text)]">Yazılım / Platform mühendisi</strong> — Bash, Python ops, GitOps.</li>
+            </ul>
+        </section>
+
+        <section class="mb-8" aria-label="Müfredat ve araçlar">
+            <h2 class="text-lg font-semibold text-[var(--text)] mb-3">Müfredat ve araçlar</h2>
+            <ul class="list-disc pl-5 space-y-2 text-xs text-[var(--muted)] leading-relaxed">
+                <li><a href="/roadmap" class="text-term-cyan underline underline-offset-2">Tüm müfredat</a> — 35 bölümlük Linux · DevOps · güvenlik haritası</li>
+                <li><a href="/encyclopedia" class="text-term-cyan underline underline-offset-2">Komut ansiklopedisi</a> — ~570 komut, TR karşılık ve örnekler</li>
+                <li><a href="/interview" class="text-term-cyan underline underline-offset-2">Mülakat antrenmanı</a> — Linux, DevOps ve güvenlik soruları</li>
+                <li><a href="/kali" class="text-term-cyan underline underline-offset-2">Kali Arsenal</a> — penetrasyon test araç kataloğu</li>
+                <li><a href="/ch0" class="text-term-cyan underline underline-offset-2">Linux nedir?</a> — müfredata giriş dersi</li>
+                <li><a href="/tracks" class="text-term-cyan underline underline-offset-2">Hedef yollar</a> — rol bazlı ders planı</li>
+            </ul>
+        </section>
+
+        <section class="mb-6" aria-label="Konu kapsamı">
+            <h2 class="text-lg font-semibold text-[var(--text)] mb-3">Ne öğreneceksiniz?</h2>
+            <p class="prose-book text-base">Terminal ve GNU araçlarından SSH, Bash, disk/LVM, Docker, Kubernetes, CI/CD, Ansible/Terraform, gözlemlenebilirlik, hardening, TLS, GitOps, bulut, Python ops, systemd, performans, SELinux, LDAP/SSO, incident response, eBPF ve konteyner güvenliğine kadar uçtan uca bir Linux omurgası.</p>
+        </section>
     </div>
 
     <footer id="site-footer" class="border-t border-card-border px-4 sm:px-8 py-4 text-[11px] text-[var(--muted)] max-w-3xl mx-auto w-full mt-auto">
         <p><strong class="text-[var(--text)]">Linux Omnibus</strong> — ücretsiz Türkçe Linux · DevOps · siber güvenlik müfredatı. Terminal, Docker, Kubernetes, Ansible, hardening ve Kali konularında job-ready eğitim.</p>
         <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1">
-            <a href="?p=tracks" class="underline underline-offset-2">Hedef yollar</a>
-            <a href="?p=roadmap" class="underline underline-offset-2">Müfredat</a>
-            <a href="?p=encyclopedia" class="underline underline-offset-2">Ansiklopedi</a>
-            <a href="?p=interview" class="underline underline-offset-2">Mülakat</a>
+            <a href="/tracks" class="underline underline-offset-2">Hedef yollar</a>
+            <a href="/roadmap" class="underline underline-offset-2">Müfredat</a>
+            <a href="/encyclopedia" class="underline underline-offset-2">Ansiklopedi</a>
+            <a href="/interview" class="underline underline-offset-2">Mülakat</a>
             <a href="https://github.com/burakkutlu27/LinuxOmnibus" rel="me noopener" class="underline underline-offset-2">GitHub</a>
             <a href="./robots.txt" class="underline underline-offset-2">robots</a>
             <a href="./sitemap.xml" class="underline underline-offset-2">sitemap</a>
@@ -195,11 +200,11 @@
         <p><strong>JavaScript gerekli:</strong> Linux Omnibus tam deneyim için JavaScript ile çalışır. Aşağıdaki statik içerik ve bağlantılar yardımcı olur.</p>
         <p>Ücretsiz Türkçe Linux müfredatı: terminal, sistem yönetimi, Docker, Kubernetes, CI/CD, Ansible, hardening, Kali ve kriz runbook’ları. DevOps, SRE ve güvenlik kariyerine job-ready hazırlık.</p>
         <p>Bölümler: Linux Nedir, Terminal, Dosyalar, GNU komutları, Yetkilendirme, Yedekleme, Editörler, PATH, FHS, Kali, Ağ, Kriz runbook, SSH, Bash, Disk/LVM, Docker, Kubernetes, CI/CD, Ansible/Terraform, Gözlemlenebilirlik, Hardening, TLS, GitOps, Git, Bulut, Python ops, DB, İleri ağ, systemd, Performance, SELinux, LDAP/SSO, IR, eBPF, Konteyner güvenliği.</p>
-        <p><a href="https://linuxomnibus.burakkutlu.com/?p=tracks">Hedef yollar</a> · <a href="https://linuxomnibus.burakkutlu.com/?p=encyclopedia">Komut ansiklopedisi</a> · <a href="https://linuxomnibus.burakkutlu.com/?p=roadmap">Tüm müfredat</a></p>
+        <p><a href="https://linuxomnibus.burakkutlu.com/tracks">Hedef yollar</a> · <a href="https://linuxomnibus.burakkutlu.com/encyclopedia">Komut ansiklopedisi</a> · <a href="https://linuxomnibus.burakkutlu.com/roadmap">Tüm müfredat</a></p>
     </div>
 </noscript>
 
-<script>window.OMNIBUS_GA_ID = window.OMNIBUS_GA_ID || '';</script>
+<script defer src="ga-config.js"></script>
 <script defer src="analytics.js"></script>
 <script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };

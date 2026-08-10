@@ -6,63 +6,63 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://linuxomnibus.burakkutlu.com/?p=tracks</loc>
+    <loc>https://linuxomnibus.burakkutlu.com/tracks</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://linuxomnibus.burakkutlu.com/?p=roadmap</loc>
+    <loc>https://linuxomnibus.burakkutlu.com/roadmap</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://linuxomnibus.burakkutlu.com/?p=encyclopedia</loc>
+    <loc>https://linuxomnibus.burakkutlu.com/encyclopedia</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://linuxomnibus.burakkutlu.com/?p=kali</loc>
+    <loc>https://linuxomnibus.burakkutlu.com/kali</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://linuxomnibus.burakkutlu.com/?p=interview</loc>
+    <loc>https://linuxomnibus.burakkutlu.com/interview</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch0</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch1</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch2</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch3</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch4</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch5</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch6</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch7</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch8</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch9</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch10</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch11</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch12</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch13</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch14</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch15</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch16</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch17</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch18</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch19</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch20</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch21</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch22</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch23</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch24</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch25</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch26</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch27</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch28</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch29</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch30</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch31</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch32</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch33</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://linuxomnibus.burakkutlu.com/?p=ch34</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch0</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch1</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch2</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch3</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch4</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch5</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch6</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch7</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch8</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch9</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch10</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch11</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch12</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch13</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch14</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch15</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch16</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch17</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch18</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch19</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch20</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch21</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch22</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch23</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch24</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch25</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch26</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch27</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch28</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch29</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch30</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch31</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch32</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch33</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://linuxomnibus.burakkutlu.com/ch34</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
